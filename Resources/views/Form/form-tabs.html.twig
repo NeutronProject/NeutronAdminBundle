@@ -1,0 +1,38 @@
+{% form_theme form with ['NeutronAdminBundle:Form:form_theme.html.twig'] %}
+
+<div id="messages"></div>
+
+<form action="{{ app.request.getRequestUri() }}" class="form-tabbed" {{ form_enctype(form) }} method="POST">
+
+    <div class="form-tabs">
+        <ul>
+            {% for key, child in  form %}
+                <li><a href="#tab-{{ child.getVar('id') }}">{{ key|trans({}, translation_domain) }}</a></li>
+            {% endfor %}
+        </ul>
+        <fieldset class="form">
+        {% for key, child in  form %}
+        	<div id="tab-{{ child.getVar('id') }}">
+                {{ form_widget(child) }}
+            </div>
+    	{% endfor %}
+    	<div class="actions">
+            <div class="controls">
+                <a href="#submit" style="float:right; margin:5px;" class="btn submit-type" >{{ submitBtnOptions.label|trans({}, translation_domain) }}</a>
+                <a href="{{ backBtnOptions.uri }}" style="float:right; margin:5px;" class="btn action" >{{ backBtnOptions.label|trans({}, translation_domain) }}</a>
+                
+            </div>
+        </div>
+    	</fieldset>
+    	
+    </div>
+
+</form>
+
+<div id="message-form-invalid" style="display:none;">
+    <div class="msg error">
+        <p>{{ 'form.message.invalid'|trans({}, 'NeutronUserBundle') }}</p><a class="close">×</a>
+    </div>
+</div>
+
+<div id="block-ui-message" style="display:none"><h3><img src="{{ neutron_base_url() }}files/images/ajax-loader.gif" /> {{ 'form.message.blockui'|trans({}, translation_domain) }}</h3></div>

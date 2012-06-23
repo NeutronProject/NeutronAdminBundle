@@ -1,0 +1,20 @@
+{
+    "name":         "neutron/neutron-admin-bundle",
+    "description":  "To be completed",
+    "keywords":     ["user,admin"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":     "Nikolay Georgiev",
+            "homepage": "http://zend.bg"
+        }
+    ],
+    "require":      {
+        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+    },
+    "autoload":     {
+        "psr-0": { "Neutron\\AdminBundle": "" }
+    },
+    "target-dir": "Neutron/AdminBundle"
+}

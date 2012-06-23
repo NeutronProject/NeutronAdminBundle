@@ -1,0 +1,23 @@
+parameters:
+    neutron_admin.twig.acl.class: Neutron\AdminBundle\Twig\Extension\AclExtension
+    neutron_admin.twig.breadcrumbs.class: Neutron\AdminBundle\Twig\Extension\BreadcrumbsExtension
+    neutron_admin.helper.form_tabs.class: Neutron\AdminBundle\Form\Helper\FormTabsHelper
+
+services:
+    neutron_admin.twig.acl:
+        class: %neutron_admin.twig.acl.class%
+        arguments: [@security.context]
+        tags:
+            - { name: twig.extension }
+            
+    neutron_admin.twig.breadcrumbs:
+        class: %neutron_admin.twig.breadcrumbs.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+            
+    neutron_admin.form_tabs:
+        class: %neutron_admin.helper.form_tabs.class%
+        arguments: [@service_container]
+        
+       

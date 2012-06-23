@@ -1,0 +1,15 @@
+<ul id="breadcrumbs">
+{% for item in path %}
+{% set class = item.isCurrent() ? 'class=current' : null %}
+	<li {{ class }}>
+		<a href="{{ item.getUri() }}">
+			{{ item.getLabel()|trans(item.getExtra('translation_params', {}), item.getExtra('translation_domain', 'messages')) }}
+		</a>
+		{% if item.isCurrent() is sameas(false) %}
+			<span class="divider">/</span>
+		{% endif %}
+	</li>
+{% endfor %}
+</ul>
+
+

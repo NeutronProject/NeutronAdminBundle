@@ -1,0 +1,7 @@
+administration:
+    menu: Administaration
+    user_management: User management 
+    profile:
+        show: Show profile
+        edit: Edit profile
+        logout: Logout

@@ -1,0 +1,63 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header class="divider"><h2>Headings</h2></header>
+		</article>
+		<div class="grid3">
+			<div class="block">
+				<h2>Form example</h2>
+			</div>
+		</div>
+		<div class="grid8">
+			<div class="block">
+				<h2>Form example</h2>
+				<div class="container">
+					<div class="body">
+						<fieldset class="form">
+							<div class="field success">
+								<label for="success" class="align">Success input:</label>
+								<div class="controls">
+									<input type="text" id="success" class="input">
+									<p>
+										<strong>Success!</strong> Your username is available.
+									</p>
+								</div>
+							</div>
+							<div class="field error">
+								<label for="error" class="align">Error input:</label>
+								<div class="controls">
+									<input type="text" id="error" class="input">
+									<p>
+										<strong>Error!</strong> Your e-mail is attached to another
+										account.
+									</p>
+								</div>
+							</div>
+							<div class="field">
+								<label for="normal" class="align">Normal input:</label>
+								<div class="controls">
+									<input type="text" id="normal" class="input">
+									<p>
+										If you want to use <strong>help-block</strong>, add class
+										<code>align</code>
+										to label.
+									</p>
+								</div>
+							</div>
+							<div class="actions">
+								<div class="controls">
+									<input type="submit" value="Submit" class="btn action"><span>or</span><input
+										type="reset" value="Reset" class="btn">
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+{% endblock %}

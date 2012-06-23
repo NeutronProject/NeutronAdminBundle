@@ -1,0 +1,100 @@
+{% extends 'knp_menu.html.twig' %}
+
+{% macro attributes(attributes) %}
+{% for name, value in attributes %}
+    {%- if value is not none and value is not sameas(false) -%}
+        {{- ' %s="%s"'|format(name, value is sameas(true) ? name|e : value|e)|raw -}}
+    {%- endif -%}
+{%- endfor -%}
+{% endmacro %}
+
+{% block item %}
+
+{% if item.getExtra('divider', false) %}
+	<li class="divider"></li>
+{% else %}
+
+	{%- set is_allowed = neutron_is_allowed(item.getExtra('allowed_roles', false)) %}
+	{%- set item = item.setDisplay(is_allowed) %}
+
+	{% if item.getExtra('section', false) is sameas(true) %}
+		{% set classes = classes|merge(['divider', 'heading']) %}
+	{% endif %}
+
+	{% if item.displayed %}
+	{# building the class of the item #}
+	    {%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}
+		{# setting active items #}
+	    {% if item.getExtra('active_items', false) %}
+			 {%- set parentItem = item.getParent() %}
+
+			{% for activeItem in item.getExtra('active_items') %}
+			 	{%- set activeItem = parentItem.getChild(activeItem) %}
+			 	{%  if activeItem is not null %}
+			 		{%- set activeItem = activeItem.setAttribute('class', 'active') %}
+			 	{% endif %}
+			 {% endfor %}
+		{% endif %}
+
+	    {% if item.getExtra('divider', false) is sameas(true) %}
+	    	{% set classes = classes|merge(['divider']) %}
+	    {% endif %}
+
+	    {%- if item.current %}
+	        {%- set classes = classes|merge([options.currentClass]) %}
+	    {%- elseif item.currentAncestor %}
+	        {%- set classes = classes|merge([options.ancestorClass]) %}
+	    {%- endif %}
+	    {%- if item.actsLikeFirst %}
+	        {%- set classes = classes|merge([options.firstClass]) %}
+	    {%- endif %}
+	    {%- if item.actsLikeLast %}
+	        {%- set classes = classes|merge([options.lastClass]) %}
+	    {%- endif %}
+	    {%- set attributes = item.attributes %}
+	    {%- if classes is not empty %}
+	        {%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
+	    {%- endif %}
+	{# displaying the item #}
+	    <li{{ _self.attributes(attributes) }}>
+	        {%- if item.uri is not empty and (not item.current or options.currentAsLink) %}
+	        {{ block('linkElement') }}
+	        {%- else %}
+	        {{ block('spanElement') }}
+	        {%- endif %}
+	{# render the list of children#}
+	        {%- set childrenClasses = item.childrenAttribute('class') is not empty ? [item.childrenAttribute('class')] : [] %}
+	        {%- set childrenClasses = childrenClasses|merge(['menu_level_' ~ item.level]) %}
+	        {%- set listAttributes = item.childrenAttributes|merge({'class': childrenClasses|join(' ') }) %}
+	        {{ block('list') }}
+	    </li>
+	{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block children %}
+{# save current variables #}
+{% set currentOptions = options %}
+{% set currentItem = item %}
+
+{# update the depth for children #}
+{% if options.depth is not none %}
+{% set options = currentOptions|merge({'depth': currentOptions.depth - 1}) %}
+{% endif %}
+{% for item in currentItem.children %}
+    {{ block('item') }}
+{% endfor %}
+{# restore current variables #}
+{% set item = currentItem %}
+{% set options = currentOptions %}
+{% endblock %}
+
+
+{% block linkElement %}
+{% if item.getExtra('label_only', false) %}
+	{{ block('label') }}
+{% else %}
+	<a href="{{ item.uri }}"{{ _self.attributes(item.linkAttributes) }}>{{ block('label') }}</a>
+{% endif %}
+{% endblock %}

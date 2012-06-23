@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block headTitle %}Neutron Backend{% endblock %}</title>
+        
+        {% block stylesheets %}
+            {{ neutron_prepend_stylesheet('files/styles.css') }}
+            {{ neutron_prepend_stylesheet('jquery/css/smoothness/jquery-ui.css') }}
+            {{ neutron_prepend_stylesheet('jquery/plugins/uniform/css/uniform.default.css') }}
+    
+            {{ neutron_stylesheet_render() }}
+
+        {% endblock %}
+        
+        {% block javascripts %}
+
+            {{ neutron_prepend_javascript('jquery/i18n/jquery-ui-i18n.js') }}
+            {{ neutron_prepend_javascript('jquery/js/jquery-ui.js') }}
+            {{ neutron_prepend_javascript('jquery/js/jquery.js') }}
+            {{ neutron_append_javascript('files/scripts.js') }}
+            {{ neutron_append_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
+    
+            {{ neutron_javascript_render() }}
+    
+            <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        
+            <!--[if lt IE 9]><script src="{{ neutron_base_url() }}files/assets/html5shiv.js"></script><![endif]-->
+
+        {% endblock %}
+    </head>
+    <body>
+        <div id="page">
+            <div id="top">
+                <a href="{{ app.request.getBaseUrl() }}">{{ app.request.getHost() }} <small>(Neutron ALPHA 1)</small></a>
+
+                <ul id="navigation">
+                    <li>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'NeutronUserBundle')|raw }} <span class="divider">&mdash;</span></li>
+                    <li class="dropdown">
+                        <a href="javascript:;">{{ 'administration.menu'|trans }}
+                            <span class="caret"></span>
+                        </a>
+                        {% set menu = knp_menu_get('NeutronAdminBundle:Main:menu', ['user_management'])%}
+                        {{ knp_menu_render(menu, {
+                        'template': 'NeutronAdminBundle:Menu:main_menu.html.twig',
+                        'allow_safe_labels': true,
+                        'currentClass': 'active',
+                        'firstClass': 'first-class',
+                        'lastClass': 'last-class'
+                        })
+                      }}
+                    </li>
+                </ul>
+            </div>
+            <div id="panel">
+                
+                    {% block headDesc %}
+                        <h1 class="icon dashboard">
+                            Header <small>some text</small>
+                        </h1>
+                    {% endblock %}
+                
+                {% set menu = knp_menu_get('NeutronAdminBundle:Main:menu').removeChild('user_management') %}
+                {{ knp_menu_render(menu, {
+	                'template': 'NeutronAdminBundle:Menu:main_menu.html.twig',
+	                'allow_safe_labels': true,
+	                'currentClass': 'active',
+	                'firstClass': 'first-class',
+	                'lastClass': 'last-class'
+                })
+                }}
+
+            </div>
+			{{ neutron_admin_breadcrumbs_render(knp_menu_get('NeutronAdminBundle:Main:menu').getCurrentItem()) }}
+
+
+            <div id="container">{% block body %}{% endblock %}</div>
+        </div>
+
+        {% block footer %}
+        <footer>
+            <p>&copy; 2012 by <a href="http:zend.bg">NeutronLabs</a></p>
+        </footer>
+        {% endblock %}
+        
+    </body>
+</html>

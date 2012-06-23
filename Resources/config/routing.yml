@@ -1,0 +1,3 @@
+NeutronAdminBundle_dashboard:
+    pattern:  /
+    defaults: { _controller: NeutronAdminBundle:Default:index }

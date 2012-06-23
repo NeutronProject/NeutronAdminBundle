@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}Backend{% endblock %}</title>
+        {% block stylesheets %}
+
+			{{ neutron_prepend_stylesheet('jquery/plugins/uniform/css/uniform.default.css') }}
+			{{ neutron_prepend_stylesheet('files/micro.css') }}
+
+			{{ neutron_stylesheet_render() }}
+
+
+        {% endblock %}
+        
+        {% block javascripts %}
+
+		    {{ neutron_prepend_javascript('jquery/js/jquery.js') }}
+            {{ neutron_append_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
+            {{ neutron_append_javascript('files/micro.js') }}
+            
+            {{ neutron_javascript_render() }}
+
+		    <!--[if lt IE 9]><script src="{{ neutron_base_url() }}files/assets/html5shiv.js"></script><![endif]-->
+	    {% endblock %}
+
+	</head>
+    <body class="animated">
+		<div id="page">
+			{% block fos_user_content %}{% endblock %}
+		</div>
+    </body>
+</html>
