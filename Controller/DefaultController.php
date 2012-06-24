@@ -8,6 +8,11 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('NeutronAdminBundle:Default:index.html.twig', array());
+        $mainTree = $this->get('neutron.tree')->get('main');
+
+        return $this->render('NeutronAdminBundle:Default:index.html.twig', array(
+            'mainTree' => $mainTree        
+        ));
     }
+    
 }

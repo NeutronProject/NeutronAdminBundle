@@ -2,6 +2,7 @@ parameters:
     neutron_admin.twig.acl.class: Neutron\AdminBundle\Twig\Extension\AclExtension
     neutron_admin.twig.breadcrumbs.class: Neutron\AdminBundle\Twig\Extension\BreadcrumbsExtension
     neutron_admin.helper.form_tabs.class: Neutron\AdminBundle\Form\Helper\FormTabsHelper
+    neutron_admin.tree.main.class: Neutron\AdminBundle\Tree\Main
 
 services:
     neutron_admin.twig.acl:
@@ -19,5 +20,17 @@ services:
     neutron_admin.form_tabs:
         class: %neutron_admin.helper.form_tabs.class%
         arguments: [@service_container]
+        
+    neutron_admin.tree.main:
+        class: %neutron_admin.tree.main.class%
+        arguments: [@neutron_tree.factory]
+        scope: request
+        
+    neutron_tree.main:
+        class: Neutron\TreeBundle\Tree\Tree
+        factory_service: neutron_admin.tree.main
+        factory_method: create
+        tags:
+            - { name: neutron_tree.tree, alias: main } 
         
        
