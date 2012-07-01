@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Tree;
 
+use Neutron\TreeBundle\Tree\Plugin\PluginFactoryInterface;
+
 use Neutron\TreeBundle\Tree\FactoryInterface;
 
 class Main
@@ -8,18 +10,28 @@ class Main
     
     protected $factory;
     
-    public function __construct(FactoryInterface $factory)
+    protected $pluginFactory;
+    
+    public function __construct(FactoryInterface $factory, PluginFactoryInterface $pluginFactory)
     {
         $this->factory = $factory;
+        $this->pluginFactory = $pluginFactory;
     }
     
     public function create()
     {
+        
+        
         $tree = $this->factory->createTree('main');
         $tree
-            ->setDataClass('Neutron\TreeBundle\Entity\Category')
+            ->setDataClass('Neutron\AdminBundle\Entity\MainTree')
             ->setRootName('Web')
-            ->setPlugins(array())
+            ->addPlugin($this->pluginFactory->createPlugin('ui', array('selectLimit' => 1)))
+            ->addPlugin($this->pluginFactory->createPlugin('contextmenu', array(
+                'enableCreateBtn' => false, 
+                'createBtnLabel' => 'Create', 
+                'createBtnUri' => 'http://google.com'
+            )))
         ;
         
         return $tree;

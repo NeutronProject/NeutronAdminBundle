@@ -23,7 +23,7 @@ services:
         
     neutron_admin.tree.main:
         class: %neutron_admin.tree.main.class%
-        arguments: [@neutron_tree.factory]
+        arguments: [@neutron_tree.factory, @neutron_tree.plugin.factory]
         scope: request
         
     neutron_tree.main:
