@@ -20,10 +20,41 @@ class Main extends ContainerAware
 
 
         $menu->addChild('Dashboard', array(
-            'route' => 'NeutronAdminBundle_dashboard',
+            'route' => 'neutron_admin.dashboard',
+        ));
+        
+        $category = $menu->addChild('category', array(
+            'label' => 'menu.category',
+            'uri' => 'javascript;',
+            'attributes' => array(
+                'class' => 'dropdown',
+            ),
+            'childrenAttributes' => array(
+                'class' => 'menu',
+            ),
             'extras' => array(
-                'active_items' => array('Child1')
-            )
+                'safe_label' => true,
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
+        
+        $category->addChild('category_management', array(
+            'label' => 'menu.category_management',
+            'route' => 'neutron_admin.category.management',
+            'extras' => array(
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
+        
+        $category->addChild('category_create', array(
+            'label' => 'menu.category_create',
+            'route' => 'neutron_admin.category.create',
+            'routeParameters' => array('parentId' => $this->container->get('request')->get('parentId', 0)),
+            'display' => false,
+            'extras' => array(
+                'allowed_roles' => array('None'),
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
         ));
 
         $userManagement = $menu->addChild('user_management', array(

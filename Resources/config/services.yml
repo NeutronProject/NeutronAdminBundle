@@ -23,7 +23,7 @@ services:
         
     neutron_admin.tree.main:
         class: %neutron_admin.tree.main.class%
-        arguments: [@neutron_tree.factory, @neutron_tree.plugin.factory]
+        arguments: [@neutron_tree.factory, @router, @translator]
         scope: request
         
     neutron_tree.main:
@@ -32,5 +32,12 @@ services:
         factory_method: create
         tags:
             - { name: neutron_tree.tree, alias: main } 
+            
+    neutron_admin.controller.category:
+        class: Neutron\AdminBundle\Controller\CategoryController
+        calls: 
+            - [setContainer, [@service_container]]
+            
+     
         
        
