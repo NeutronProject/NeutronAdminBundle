@@ -1,0 +1,12 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header class="divider"><h2>Headings</h2></header>
+		 	{{ neutron_tree(mainTree) }}
+		</article>
+
+	</div>
+</div>
+{% endblock %}

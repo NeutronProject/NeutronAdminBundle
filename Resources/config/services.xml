@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="neutron_admin.twig.acl.class">Neutron\AdminBundle\Twig\Extension\AclExtension</parameter>
+        <parameter key="neutron_admin.twig.breadcrumbs.class">Neutron\AdminBundle\Twig\Extension\BreadcrumbsExtension</parameter>
+        <parameter key="neutron_admin.helper.form_tabs.class">Neutron\AdminBundle\Form\Helper\FormTabsHelper</parameter>
+        <parameter key="neutron_admin.tree.main.class">Neutron\AdminBundle\Tree\Main</parameter>
+        <parameter key="neutron_admin.controller.category.class">Neutron\AdminBundle\Controller\CategoryController</parameter>
+    </parameters>
+    
+    <services>
+
+		<service id="neutron_admin.twig.acl" class="%neutron_admin.twig.acl.class%">
+            <argument type="service" id="security.context" />
+       		<tag name="twig.extension" />
+        </service>
+        
+		<service id="neutron_admin.twig.breadcrumbs" class="%neutron_admin.twig.breadcrumbs.class%">
+            <argument type="service" id="service_container" />
+       		<tag name="twig.extension" />
+        </service>
+        
+		<service id="neutron_admin.form_tabs" class="%neutron_admin.helper.form_tabs.class%">
+            <argument type="service" id="service_container" />
+        </service>
+        
+		<service id="neutron_admin.tree.main" class="%neutron_admin.tree.main.class%" scope="request">
+            <argument type="service" id="neutron_tree.factory" />
+            <argument type="service" id="router" />
+            <argument type="service" id="translator" />
+        </service>
+        
+		<service id="neutron_tree.main" class="Neutron\TreeBundle\Tree\Tree" factory-method="create" factory-service="neutron_admin.tree.main">
+			<tag name="neutron_tree.tree" alias="main" />
+        </service>
+        
+     	<service id="neutron_admin.controller.category" class="%neutron_admin.controller.category.class%">
+            <call method="setContainer">
+            	<argument type="service" id="service_container" />
+        	</call>
+        </service>
+
+    </services>
+
+</container>
