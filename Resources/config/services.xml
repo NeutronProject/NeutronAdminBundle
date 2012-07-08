@@ -29,6 +29,7 @@
         </service>
         
 		<service id="neutron_admin.tree.main" class="%neutron_admin.tree.main.class%" scope="request">
+			<argument>%neutron_admin.category.tree_data_class%</argument>
             <argument type="service" id="neutron_tree.factory" />
             <argument type="service" id="router" />
             <argument type="service" id="translator" />
@@ -42,6 +43,10 @@
             <call method="setContainer">
             	<argument type="service" id="service_container" />
         	</call>
+        </service>
+        
+        <service id="neutron_admin.form.event_subscriber.category" class="Neutron\AdminBundle\Form\EventSubscriber\CategorySubscriber">
+			
         </service>
 
     </services>

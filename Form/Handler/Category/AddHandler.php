@@ -1,5 +1,7 @@
 <?php
-namespace Neutron\AdminBundle\Form\Handler;
+namespace Neutron\AdminBundle\Form\Handler\Category;
+
+use Neutron\TreeBundle\Tree\Provider\TreeProviderInterface;
 
 use Neutron\TreeBundle\Tree\TreeModelInterface;
 
@@ -20,36 +22,46 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 
 
-class AddFormHandler
+class AddHandler
 {
+    
+    const MODE_ADD = 'ADD';
+    
+    const MODE_EDIT = 'EDIT';
+    
     protected $request;
     protected $router;
-    protected $treeManager;
     protected $form;
     protected $formHelper;
+    protected $treeManager;
 
 
     public function __construct(Form $form, FormHelper $formHelper, 
-            Request $request, Router $router, TreeManagerInterface $treeManager)
+            Request $request, Router $router, TreeProviderInterface $treeProvider, $treeName)
     {
         $this->form = $form;
         $this->formHelper = $formHelper;
         $this->request = $request;
         $this->router = $router;
-        $this->treeManager = $treeManager;
-
+        $this->treeManager = $treeProvider->get($treeName)->getManager();
     }
 
-    public function process($data)
+    public function process($mode)
     {
-        $this->form->setData($data);
+        if ($mode === self::MODE_ADD){
+            $node = $this->treeManager->createNode();
+        }
+        
+        $parent = $this->manager->findNodeById($this->request->get('parentId', false));
+        
+        $this->form->setData($node);
         
         if ($this->request->isXmlHttpRequest()) {
             
             $this->form->bindRequest($this->request);
             
             if ($this->form->isValid()) {
-                $this->onSuccess($data);
+                $this->onValid($node);
                 $this->request->getSession()
                     ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.created');
                 
@@ -72,9 +84,9 @@ class AddFormHandler
         return false;
     }
 
-    protected function onSuccess(TreeModelInterface $tree)
+    protected function onValid(TreeModelInterface $tree)
     {
-       
+        
     }
    
 }

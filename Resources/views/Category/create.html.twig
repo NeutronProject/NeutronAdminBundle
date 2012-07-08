@@ -2,7 +2,7 @@
 
 {% block javascripts %}
     {{ neutron_append_javascript('jquery/plugins/blockui/jquery.blockUI.js') }}
-    {{ neutron_append_javascript('bundles/neutronadmin/js/form-tabs.js') }}
+    {{ neutron_append_javascript('bundles/neutronadmin/js/form.js') }}
     {{ parent() }}
 {% endblock %}
 
@@ -14,14 +14,14 @@
             {% form_theme form with ['NeutronAdminBundle:Form:form_theme.html.twig'] %}
             
             <div id="messages"></div>
-            <form class="form" action="" method="post"{{ form_enctype(form) }}>
+            <form class="form neutron_form_simple" action="" method="post"{{ form_enctype(form) }}>
      
                 {{ form_widget(form) }}
          
             <div class="actions">
                 <div class="controls">
                     <a href="#submit" style="float:right; margin:5px;" class="btn submit-type" >proceed</a>
-                    <a href="" style="float:right; margin:5px;" class="btn action" >cancel</a>
+                    <a href="{{ path('neutron_admin.category.management') }}" style="float:right; margin:5px;" class="btn action" >cancel</a>
                     
                 </div>
             </div>

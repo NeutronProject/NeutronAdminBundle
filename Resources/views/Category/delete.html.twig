@@ -1,0 +1,37 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header><h2>Headings</h2></header>
+		 	
+            <table class="table">
+                <tbody>
+                	<tr>
+                		<td><strong>{{ 'form.title'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                		<td class="actions">{{ node.title }}</td>
+                	</tr>
+                	
+                	<tr>
+                		<td><strong>{{ 'form.slug'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                		<td class="actions">{{ node.slug }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="clear:both"></div>
+            
+            <div class="actions">
+                <div class="controls">
+                    <form action="{{ app.request.requestUri }}" method="POST">
+                        <input type="hidden" name="delete" value="1"/>
+                        <input type="submit"  style="float:right; margin:5px;" type="submit" class="btn" value="{{ 'neutron_admin.category.delete'|trans({}, 'NeutronAdminBundle') }}">
+                        <a href="{{ path('neutron_admin.category.management') }}" style="float:right; margin:5px;" class="btn action" >{{ 'neutron_admin.category.management.back'|trans({}, 'NeutronAdminBundle') }}</a>
+                    </form>   
+                </div>
+            </div> 	
+		</article>
+
+	</div>
+</div>
+{% endblock %}

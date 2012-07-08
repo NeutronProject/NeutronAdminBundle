@@ -37,6 +37,20 @@ class MainTree implements TreeModelInterface
     protected $slug;
     
     /**
+     * @var boolean 
+     *
+     * @ORM\Column(type="boolean", name="enabled")
+     */
+    protected $enabled = false;
+    
+    /**
+     * @var boolean 
+     *
+     * @ORM\Column(type="boolean", name="displayed")
+     */
+    protected $displayed = false;
+    
+    /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      */
@@ -96,6 +110,26 @@ class MainTree implements TreeModelInterface
     public function getSlug()
     {
         return $this->slug;
+    }
+    
+    public function setEnabled($bool)
+    {
+        $this->enabled = (bool) $bool;
+    }
+    
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+    
+    public function setDisplayed($bool)
+    {
+        $this->displayed = (bool) $bool;
+    }
+    
+    public function isDisplayed()
+    {
+        return $this->displayed;
     }
     
     public function setParent(TreeModelInterface $parent = null)

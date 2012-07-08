@@ -18,6 +18,16 @@
         <default key="_controller">neutron_admin.controller.category:createAction</default>
         <requirement key="_method">GET|POST</requirement>
     </route>
+    
+    <route id="neutron_admin.category.update" pattern="/category/update/{nodeId}">
+        <default key="_controller">neutron_admin.controller.category:updateAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+    
+    <route id="neutron_admin.category.delete" pattern="/category/delete/{nodeId}">
+        <default key="_controller">neutron_admin.controller.category:deleteAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
 
     
 </routes>

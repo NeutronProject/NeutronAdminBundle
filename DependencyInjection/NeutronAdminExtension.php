@@ -26,7 +26,59 @@ class NeutronAdminExtension extends Extension
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         
-        $loader->load('services.xml');
+        foreach (array('services') as $basename) {
+            $loader->load(sprintf('%s.xml', $basename));
+        }
         
+        if (!empty($config['category'])) {
+            $this->loadCategory($config['category'], $container, $loader);
+        }
+
+    }
+    
+    private function loadCategory(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $loader->load('category.xml');
+    
+        $container->setAlias('neutron_admin.category.form.handler.add', $config['form']['handler']);
+        
+        
+        $this->remapParametersNamespaces($config, $container, array(
+            'form' => 'neutron_admin.category.form.%s',
+            '' => array(
+                'tree_data_class' => 'neutron_admin.category.tree_data_class',
+                'tree_name' => 'neutron_admin.category.tree_name'       
+            )
+        ));
+    }
+    
+    protected function remapParameters(array $config, ContainerBuilder $container, array $map)
+    {
+        foreach ($map as $name => $paramName) {
+            if (array_key_exists($name, $config)) {
+                $container->setParameter($paramName, $config[$name]);
+            }
+        }
+    }
+    
+    protected function remapParametersNamespaces(array $config, ContainerBuilder $container, array $namespaces)
+    {
+        foreach ($namespaces as $ns => $map) {
+            if ($ns) {
+                if (!array_key_exists($ns, $config)) {
+                    continue;
+                }
+                $namespaceConfig = $config[$ns];
+            } else {
+                $namespaceConfig = $config;
+            }
+            if (is_array($map)) {
+                $this->remapParameters($namespaceConfig, $container, $map);
+            } else {
+                foreach ($namespaceConfig as $name => $value) {
+                    $container->setParameter(sprintf($map, $name), $value);
+                }
+            }
+        }
     }
 }

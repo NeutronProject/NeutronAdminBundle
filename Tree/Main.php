@@ -9,6 +9,7 @@ use Neutron\TreeBundle\Tree\FactoryInterface;
 
 class Main
 {
+    protected $dataClass;
     
     protected $factory;
     
@@ -16,8 +17,9 @@ class Main
     
     protected $translator;
     
-    public function __construct(FactoryInterface $factory, Router $router,  Translator $translator)
+    public function __construct($dataClass, FactoryInterface $factory, Router $router,  Translator $translator)
     {
+        $this->dataClass = $dataClass;
         $this->factory = $factory;
         $this->router = $router;
         $this->translator = $translator;
@@ -28,7 +30,8 @@ class Main
 
         $tree = $this->factory->createTree('main');
         $tree
-            ->setDataClass('Neutron\AdminBundle\Entity\MainTree')
+            ->setDataClass($this->dataClass)
+            ->setManager($this->factory->createManager($this->dataClass))
             ->setRootName('Web')
             ->addPlugin($this->factory->createPlugin('ui', array('selectLimit' => 1)))
             ->addPlugin($this->factory->createPlugin('contextmenu', array(
@@ -36,6 +39,16 @@ class Main
                     'disabled' => false,
                     'label' => $this->translator->trans('tree.btn.create', array(), 'NeutronAdminBundle'),
                     'uri' => $this->router->generate('neutron_admin.category.create', array('parentId' => '{parentId}'))        
+                ), 
+                'updateBtnOptions' => array(
+                    'disabled' => false,
+                    'label' => $this->translator->trans('tree.btn.update', array(), 'NeutronAdminBundle'),
+                    'uri' => $this->router->generate('neutron_admin.category.update', array('nodeId' => '{nodeId}'))        
+                ), 
+                'deleteBtnOptions' => array(
+                    'disabled' => false,
+                    'label' => $this->translator->trans('tree.btn.delete', array(), 'NeutronAdminBundle'),
+                    'uri' => $this->router->generate('neutron_admin.category.delete', array('nodeId' => '{nodeId}'))        
                 ), 
             )))
         ;

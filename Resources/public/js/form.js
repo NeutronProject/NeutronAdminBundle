@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
 	$(document).ajaxStop($.unblockUI); 
 	
 	jQuery('.submit-type').click(function(){ 
-		var form = jQuery(this).closest('.form-simple'); 
+		var form = jQuery(this).closest('.neutron_form_simple'); 
 		jQuery.ajax({
 			url: form.attr('action'),
 			type: 'post',

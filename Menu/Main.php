@@ -56,6 +56,28 @@ class Main extends ContainerAware
                 'translation_domain' => 'NeutronAdminBundle'
             ),
         ));
+        
+        $category->addChild('category_update', array(
+            'label' => 'menu.category_update',
+            'route' => 'neutron_admin.category.update',
+            'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
+            'display' => false,
+            'extras' => array(
+                'allowed_roles' => array('None'),
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
+        
+        $category->addChild('category_delete', array(
+            'label' => 'menu.category_delete',
+            'route' => 'neutron_admin.category.delete',
+            'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
+            'display' => false,
+            'extras' => array(
+                'allowed_roles' => array('None'),
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
 
         $userManagement = $menu->addChild('user_management', array(
             'uri' => 'javascript:;',

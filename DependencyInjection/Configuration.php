@@ -2,7 +2,10 @@
 
 namespace Neutron\AdminBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
@@ -20,10 +23,32 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neutron_admin');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $this->addCategorySection($rootNode);
 
         return $treeBuilder;
+    }
+    
+    private function addCategorySection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('category')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('tree_data_class')->defaultValue('Neutron\AdminBundle\Entity\MainTree')->end()
+                        ->scalarNode('tree_name')->defaultValue('main')->end()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue('neutron_admin_form_category_add')->end()
+                                ->scalarNode('handler')->defaultValue('neutron_admin.form.handler.category.add')->end()
+                                ->scalarNode('name')->defaultValue('neutron_admin_form_category_add')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 }

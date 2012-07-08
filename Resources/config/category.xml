@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    
+    <services>
+
+        <service id="neutron_admin.category.form.add" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%neutron_admin.category.form.name%</argument>
+            <argument>%neutron_admin.category.form.type%</argument>
+        </service>
+
+        <service id="neutron_admin.form.type.category.add" class="Neutron\AdminBundle\Form\Type\Category\AddType">
+            <argument type="service" id="neutron_admin.form.event_subscriber.category"/>
+            <argument>%neutron_admin.category.tree_data_class%</argument>
+            <tag name="form.type" alias="neutron_admin_form_category_add" />
+        </service>
+
+        <service id="neutron_admin.form.handler.category.add" class="Neutron\AdminBundle\Form\Handler\Category\AddHandler" scope="request" public="false">
+            <argument type="service" id="neutron_admin.category.form.add" />
+            <argument type="service" id="neutron_component.form.helper.form_helper" />
+            <argument type="service" id="request" />
+            <argument type="service" id="router" />
+            <argument type="service" id="neutron.tree" />
+            <argument>%neutron_admin.category.tree_name%</argument>
+        </service>
+
+    </services>
+
+</container>
