@@ -3,6 +3,7 @@
 {% block javascripts %}
     {{ neutron_append_javascript('jquery/plugins/blockui/jquery.blockUI.js') }}
     {{ neutron_append_javascript('bundles/neutronadmin/js/form.js') }}
+    {{ neutron_append_javascript('bundles/neutronadmin/category/category-form.js') }}
     {{ parent() }}
 {% endblock %}
 
@@ -15,7 +16,6 @@
             
             <div id="messages"></div>
             <form class="form neutron_form_simple" action="" method="post"{{ form_enctype(form) }}>
-     
                 {{ form_widget(form) }}
          
             <div class="actions">

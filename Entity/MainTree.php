@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\AdminBundle\Entity;
 
-use Neutron\TreeBundle\Tree\TreeModelInterface;
+use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  * 
  */
-class MainTree implements TreeModelInterface 
+class MainTree implements TreeNodeInterface 
 {
     /**
      * @var integer
@@ -32,9 +32,30 @@ class MainTree implements TreeModelInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", name="slug", length=255, nullable=false, unique=true)
+     * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
      */
     protected $slug;
+    
+    /**
+     * @var string 
+     *
+     * @ORM\Column(type="string", name="type", length=255, nullable=false, unique=false)
+     */
+    protected $type = 'default';
+    
+    /**
+     * @var string 
+     *
+     * @ORM\Column(type="text", name="external_uri", nullable=true)
+     */
+    protected $externalUri;
+    
+    /**
+     * @var string 
+     *
+     * @ORM\Column(type="text", name="link_target", nullable=false)
+     */
+    protected $linkTarget = '_self';
     
     /**
      * @var boolean 
@@ -77,12 +98,12 @@ class MainTree implements TreeModelInterface
     /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="MainTree", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
     
     /**
-     * @ORM\OneToMany(targetEntity="MainTree", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="MainTree", mappedBy="parent", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     protected $children;
@@ -112,6 +133,36 @@ class MainTree implements TreeModelInterface
         return $this->slug;
     }
     
+    public function setType($type)
+    {
+        $this->type = (string) $type;
+    }
+    
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    public function setExternalUri($uri)
+    {
+        $this->externalUri = $uri;
+    }
+    
+    public function getExternalUri()
+    {
+        return $this->externalUri;
+    }
+    
+    public function setLinkTarget($target)
+    {
+        $this->linkTarget = (string) $target;
+    }
+    
+    public function getLinkTarget()
+    {
+        return $this->linkTarget;
+    }
+    
     public function setEnabled($bool)
     {
         $this->enabled = (bool) $bool;
@@ -132,7 +183,7 @@ class MainTree implements TreeModelInterface
         return $this->displayed;
     }
     
-    public function setParent(TreeModelInterface $parent = null)
+    public function setParent(TreeNodeInterface $parent = null)
     {
         $this->parent = $parent;
     }

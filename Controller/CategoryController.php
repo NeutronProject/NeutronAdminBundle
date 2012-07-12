@@ -51,6 +51,10 @@ class CategoryController extends ContainerAware
         $form = $this->container->get('neutron_admin.category.form.add');
         $request = $this->container->get('request');
         
+        $subscriber = $this->container->get('neutron_admin.form.event_subscriber.category');
+        
+        $subscriber->setParentNode($parent);
+        
         $form->setData($node);
         
         if ($request->isXmlHttpRequest()) {
@@ -107,6 +111,10 @@ class CategoryController extends ContainerAware
         $form = $this->container->get('neutron_admin.category.form.add');
         $request = $this->container->get('request');
         
+        $subscriber = $this->container->get('neutron_admin.form.event_subscriber.category');
+        
+        $subscriber->setParentNode($node->getParent());
+        
         $form->setData($node);
         
         if ($request->isXmlHttpRequest()) {
@@ -159,11 +167,26 @@ class CategoryController extends ContainerAware
         
         $request = $this->container->get('request');
         
-        if ($request->getMethod() == 'POST' && $request->get('delete', false)){
-            $manager->deleteNode($node);
+
+        if ($request->getMethod() == 'POST'){
+            
+            $operation = $request->get('operation', false);
+            
+            $validOperations = array('delete', 'remove');
+            
+            if (!in_array($operation, $validOperations)){
+                throw new \InvalidArgumentException(sprintf('Operation "%s" is not valid', $operation));
+            }
+            
+            if ($operation == 'delete'){
+                $manager->deleteNode($node);
+            } elseif($operation == 'remove'){
+                $manager->removeNodeFromTree($node);
+            } 
+            
             
             $request->getSession()
-                ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.updated');
+                ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.deleted');
             
             $url = $this->container->get('router')->generate('neutron_admin.category.management');
             

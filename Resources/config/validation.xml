@@ -10,7 +10,7 @@
 	        <option name="fields">slug</option>
 	        <option name="message">slug.already_used</option>
 	        <option name="groups">
-                <value>Creation</value>
+                <value>category.slug</value>
             </option>
    	    </constraint>       
 
@@ -19,21 +19,23 @@
         	<constraint name="NotBlank">
                 <option name="message">title.blank</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>create</value>
+               	    <value>update</value>
                 </option>
             </constraint>
             <constraint name="MinLength">
                 <option name="limit">2</option>
                 <option name="message">title.short</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>create</value>
+                    <value>update</value>
                 </option>
             </constraint>
             <constraint name="MaxLength">
                 <option name="limit">255</option>
                 <option name="message">title.long</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>creation</value>
                 </option>
             </constraint>
         </property>
@@ -42,23 +44,49 @@
         	<constraint name="NotBlank">
                 <option name="message">slug.blank</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>category.slug</value>
                 </option>
             </constraint>
             <constraint name="MinLength">
                 <option name="limit">2</option>
                 <option name="message">slug.short</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>category.slug</value>
                 </option>
             </constraint>
             <constraint name="MaxLength">
                 <option name="limit">255</option>
                 <option name="message">slug.long</option>
                 <option name="groups">
-                    <value>Creation</value>
+                    <value>category.slug</value>
                 </option>
             </constraint>
+        </property>
+        
+        <property name="type">
+        	<constraint name="NotBlank">
+                <option name="message">type.blank</option>
+                <option name="groups">
+                    <value>create</value>
+                </option>
+            </constraint>
+        </property>
+        
+        <property name="externalUri">
+        	<constraint name="Url">
+                <option name="message">externalUri.url.invalid</option>
+                <option name="groups">
+                    <value>category.external</value>
+                </option>
+            </constraint>
+            
+            <constraint name="NotBlank">
+                <option name="message">externalUri.blank</option>
+                <option name="groups">
+                    <value>category.external</value>
+                </option>
+            </constraint>
+            
         </property>
         
     </class>

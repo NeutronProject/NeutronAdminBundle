@@ -70,6 +70,7 @@
 
 {% block choice_widget_collapsed %}
 {% spaceless %}
+<div class="controls">
     <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
         {% if empty_value is not none %}
             <option value="">{{ empty_value|trans({}, translation_domain) }}</option>
@@ -84,6 +85,7 @@
         {% set options = choices %}
         {{ block('choice_widget_options') }}
     </select>
+</div>
 {% endspaceless %}
 {% endblock choice_widget_collapsed %}
 
@@ -205,7 +207,7 @@
 
 {% block form_row %}
 {% spaceless %}
-    <div class="field">
+    <div id="{{ form.getVar('id') }}-div" class="field">
         {{ form_label(form, label|default(null)) }}
         {#
         If the child is a compound form, the errors are rendered inside

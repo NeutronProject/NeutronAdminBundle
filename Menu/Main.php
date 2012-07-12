@@ -20,7 +20,7 @@ class Main extends ContainerAware
 
 
         $menu->addChild('Dashboard', array(
-            'route' => 'neutron_admin.dashboard',
+            'route' => 'dashboard',
         ));
         
         $category = $menu->addChild('category', array(

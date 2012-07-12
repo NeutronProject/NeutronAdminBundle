@@ -16,6 +16,21 @@
                 		<td><strong>{{ 'form.slug'|trans({}, 'NeutronAdminBundle') }}</strong></td>
                 		<td class="actions">{{ node.slug }}</td>
                     </tr>
+                    
+                	<tr>
+                		<td><strong>{{ 'form.type'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                		<td class="actions">{{ node.type }}</td>
+                    </tr>
+                    
+                	<tr>
+                		<td><strong>{{ 'form.enabled'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                		<td class="actions">{{ node.enabled|yes_no }}</td>
+                    </tr>
+                    
+                	<tr>
+                		<td><strong>{{ 'form.displayed'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                		<td class="actions">{{ node.displayed|yes_no }}</td>
+                    </tr>
                 </tbody>
             </table>
             
@@ -24,8 +39,9 @@
             <div class="actions">
                 <div class="controls">
                     <form action="{{ app.request.requestUri }}" method="POST">
-                        <input type="hidden" name="delete" value="1"/>
-                        <input type="submit"  style="float:right; margin:5px;" type="submit" class="btn" value="{{ 'neutron_admin.category.delete'|trans({}, 'NeutronAdminBundle') }}">
+                        
+                        <button type="submit"  style="float:right; margin:5px;" type="submit" class="btn" name="operation" value="delete">{{ 'neutron_admin.category.delete'|trans({}, 'NeutronAdminBundle') }}</button>
+                        <button type="submit"  style="float:right; margin:5px;" type="submit" class="btn" name="operation" value="remove">{{ 'neutron_admin.category.remove'|trans({}, 'NeutronAdminBundle') }}</button>
                         <a href="{{ path('neutron_admin.category.management') }}" style="float:right; margin:5px;" class="btn action" >{{ 'neutron_admin.category.management.back'|trans({}, 'NeutronAdminBundle') }}</a>
                     </form>   
                 </div>
