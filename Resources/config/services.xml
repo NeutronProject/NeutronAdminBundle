@@ -48,6 +48,10 @@
         <service id="neutron_admin.form.event_subscriber.category" class="Neutron\AdminBundle\Form\EventSubscriber\CategorySubscriber">
 			
         </service>
+        
+        <service id="neutron_admin.menu.voter" class="Knp\Menu\Matcher\Voter\UriVoter">
+			<tag name="knp_menu.voter" />
+        </service>
 
     </services>
 

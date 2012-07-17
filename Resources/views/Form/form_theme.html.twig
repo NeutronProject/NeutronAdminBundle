@@ -312,13 +312,13 @@
         "data-placeholder": empty_value,
         "class": "chzn-select"
     }|merge(attr) %}
-    <div class="controls">
-        {{ block('choice_widget') }}
     
-        <span class="neutron_chosen" style="display:none">
-            {{ configs|merge({'id': id})|json_encode|raw }}
-        </span>
-    </div>
+    {{ block('choice_widget') }}
+
+    <span class="neutron_chosen" style="display:none">
+        {{ configs|merge({'id': id})|json_encode|raw }}
+    </span>
+    
 </div>
 {% endspaceless %}
 {% endblock neutron_chosen_row %}
@@ -333,6 +333,7 @@
     </div>
 {% endspaceless %} 
 {% endblock neutron_plain_row %} 
+
 
 {# Deprecated in Symfony 2.1, to be removed in 2.3 #}
 

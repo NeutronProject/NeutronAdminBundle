@@ -9,6 +9,8 @@
  */
 namespace Neutron\AdminBundle\Twig\Extension;
 
+use Knp\Menu\Iterator\CurrentItemFilterIterator;
+
 use Knp\Menu\ItemInterface;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -45,10 +47,32 @@ class BreadcrumbsExtension extends \Twig_Extension
      * @return string html
      */
     public function render(ItemInterface $menu)
-    {
+    {   
+        $matcher = $this->container->get('knp_menu.matcher');
+        $voter = $this->container->get('neutron_admin.menu.voter');
+        $voter->setUri($this->container->get('request')->getRequestUri());
+        $matcher->addVoter($voter);
+        
+        $treeIterator = new \RecursiveIteratorIterator(
+            new \Knp\Menu\Iterator\RecursiveItemIterator(
+                new \ArrayIterator(array($menu))
+            ),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $iterator = new \Knp\Menu\Iterator\CurrentItemFilterIterator($treeIterator, $matcher);
+        
+        $breadcrumbs = array();
+        
+        foreach ($iterator as $item) {
+            $item->setCurrent(true);
+            $breadcrumbs = $item->getBreadcrumbsArray();
+            break;
+        }
+
         return $this->container->get('templating')
         	->render('NeutronAdminBundle:Menu:breadcrumbs.html.twig',
-        		array('path' => $this->getPath($menu->getCurrentItem())));
+        		array('breadcrumbs' => $breadcrumbs));
     }
 
     /**
@@ -71,24 +95,5 @@ class BreadcrumbsExtension extends \Twig_Extension
     {
         return 'neutron_admin_breadcrumbs';
     }
-
-	/**
-	 * Gets menu path
-	 *
-	 * @param ItemInterface $item
-	 * @return array
-	 */
-    protected function getPath(ItemInterface $item)
-    {
-    	$path = array();
-    	$obj = $item;
-
-    	do {
-    		$path[] = $obj;
-    	} while ($obj = $obj->getParent());
-
-		return array_reverse($path);
-	}
-
 
 }

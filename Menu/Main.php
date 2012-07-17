@@ -2,6 +2,10 @@
 
 namespace Neutron\AdminBundle\Menu;
 
+use Knp\Menu\Matcher\Voter\UriVoter;
+
+use Symfony\Component\HttpFoundation\Request;
+
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Neutron\AdminBundle\AdminEvents;
@@ -12,12 +16,13 @@ class Main extends ContainerAware
 
     public function menu(FactoryInterface $factory, array $options)
     {
-
+        $this->container->get('neutron_admin.menu.voter')
+            ->setUri($this->container->get('request')->getRequestUri());
+        
         $menu = $factory->createItem('Localhost');
-        $menu->setCurrentUri($this->container->get('request')->getRequestUri());
         $menu->setUri($this->container->get('request')->getBaseUrl() . '/admin');
         $menu->setChildrenAttribute('id', 'menu');
-
+        $menu->setExtras(array('breadcrumbs' => true));
 
         $menu->addChild('Dashboard', array(
             'route' => 'dashboard',
@@ -34,6 +39,7 @@ class Main extends ContainerAware
             ),
             'extras' => array(
                 'safe_label' => true,
+                'breadcrumbs' => false,
                 'translation_domain' => 'NeutronAdminBundle'
             ),
         ));
@@ -42,6 +48,7 @@ class Main extends ContainerAware
             'label' => 'menu.category_management',
             'route' => 'neutron_admin.category.management',
             'extras' => array(
+                'breadcrumbs' => true,
                 'translation_domain' => 'NeutronAdminBundle'
             ),
         ));
@@ -52,6 +59,7 @@ class Main extends ContainerAware
             'routeParameters' => array('parentId' => $this->container->get('request')->get('parentId', 0)),
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'allowed_roles' => array('None'),
                 'translation_domain' => 'NeutronAdminBundle'
             ),
@@ -63,6 +71,7 @@ class Main extends ContainerAware
             'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'allowed_roles' => array('None'),
                 'translation_domain' => 'NeutronAdminBundle'
             ),
@@ -74,6 +83,7 @@ class Main extends ContainerAware
             'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'allowed_roles' => array('None'),
                 'translation_domain' => 'NeutronAdminBundle'
             ),
@@ -89,6 +99,7 @@ class Main extends ContainerAware
                 'class' => 'menu',
             ),
             'extras' => array(
+               'breadcrumbs' => false,
                'safe_label' => true,
                'translation_domain' => 'NeutronUserBundle'
             )
@@ -98,6 +109,7 @@ class Main extends ContainerAware
             'label' => 'menu.user_management',
             'route' => 'neutron_user_management',
             'extras' => array(
+                'breadcrumbs' => true,
                 'translation_domain' => 'NeutronUserBundle'
             ),
         ));
@@ -107,6 +119,7 @@ class Main extends ContainerAware
             'route' => 'neutron_user_management_add',
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'translation_domain' => 'NeutronUserBundle',
                 'allowed_roles' => array('None'),
             ),
@@ -118,6 +131,7 @@ class Main extends ContainerAware
             'routeParameters' => array('rowId' => $this->container->get('request')->get('rowId', 0)),
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'translation_domain' => 'NeutronUserBundle',
                 'allowed_roles' => array('None'),
             ),
@@ -129,6 +143,7 @@ class Main extends ContainerAware
             'routeParameters' => array('rowId' => $this->container->get('request')->get('rowId', 0)),
             'display' => false,
             'extras' => array(
+                'breadcrumbs' => true,
                 'translation_domain' => 'NeutronUserBundle',
                 'allowed_roles' => array('None'),
             ),
@@ -137,12 +152,16 @@ class Main extends ContainerAware
         $userManagement->addChild('profile_show', array(
             'label' => 'administration.profile.show',
             'route' => 'fos_user_profile_show',
+                'extras' => array(
+                    'breadcrumbs' => true,
+                )
         ));
 
         $userManagement->addChild('profile_edit', array(
             'label' => 'administration.profile.edit',
             'route' => 'fos_user_profile_edit',
         	'extras' => array(
+        	    'breadcrumbs' => true,
         		'allowed_roles' => array('GOD'),
         	)
         ));

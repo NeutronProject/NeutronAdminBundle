@@ -28,7 +28,8 @@
 {% block children %}
 {# save current variables #}
 {% set currentOptions = options %}
-{% set currentItem = item %}{# update the depth for children #}
+{% set currentItem = item %}
+{# update the depth for children #}
 {% if options.depth is not none %}
 {% set options = currentOptions|merge({'depth': currentOptions.depth - 1}) %}
 {% endif %}
@@ -44,9 +45,9 @@
 {% if item.displayed %}
 {# building the class of the item #}
     {%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}
-    {%- if item.current %}
+    {%- if matcher.isCurrent(item) %}
         {%- set classes = classes|merge([options.currentClass]) %}
-    {%- elseif item.currentAncestor %}
+    {%- elseif matcher.isAncestor(item, options.depth) %}
         {%- set classes = classes|merge([options.ancestorClass]) %}
     {%- endif %}
     {%- if item.actsLikeFirst %}
@@ -61,7 +62,7 @@
     {%- endif %}
 {# displaying the item #}
     <li{{ _self.attributes(attributes) }}>
-        {%- if item.uri is not empty and (not item.current or options.currentAsLink) %}
+        {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
         {{ block('linkElement') }}
         {%- else %}
         {{ block('spanElement') }}
