@@ -7,6 +7,15 @@
     <class name="Neutron\AdminBundle\Entity\MainTree">
         
         <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+	        <option name="fields">title</option>
+	        <option name="message">title.already_used</option>
+	        <option name="groups">
+                <value>create</value>
+               	<value>update</value>
+            </option>
+   	    </constraint>    
+   	       
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
 	        <option name="fields">slug</option>
 	        <option name="message">slug.already_used</option>
 	        <option name="groups">
@@ -41,12 +50,7 @@
         </property>
         
         <property name="slug">
-        	<constraint name="NotBlank">
-                <option name="message">slug.blank</option>
-                <option name="groups">
-                    <value>category.slug</value>
-                </option>
-            </constraint>
+        	
             <constraint name="MinLength">
                 <option name="limit">2</option>
                 <option name="message">slug.short</option>

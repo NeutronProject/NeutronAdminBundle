@@ -11,12 +11,17 @@
                 		<td><strong>{{ 'form.title'|trans({}, 'NeutronAdminBundle') }}</strong></td>
                 		<td class="actions">{{ node.title }}</td>
                 	</tr>
-                	
-                	<tr>
-                		<td><strong>{{ 'form.slug'|trans({}, 'NeutronAdminBundle') }}</strong></td>
-                		<td class="actions">{{ node.slug }}</td>
-                    </tr>
-                    
+                	{% if node.type == 'neutron.plugin.external' %}
+                	    <tr>
+                    		<td><strong>{{ 'form.external'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                    		<td class="actions">{{ node.externalUri }}</td>
+                        </tr>
+                	{% else %}
+                    	<tr>
+                    		<td><strong>{{ 'form.slug'|trans({}, 'NeutronAdminBundle') }}</strong></td>
+                    		<td class="actions">{{ node.slug }}</td>
+                        </tr>
+                    {% endif %}
                 	<tr>
                 		<td><strong>{{ 'form.type'|trans({}, 'NeutronAdminBundle') }}</strong></td>
                 		<td class="actions">{{ node.type }}</td>

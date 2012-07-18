@@ -31,7 +31,7 @@ class MainTree implements TreeNodeInterface
     
     /**
      * @var string
-     *
+     * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
      */
     protected $slug;
