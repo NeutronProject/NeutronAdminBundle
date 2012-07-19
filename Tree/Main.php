@@ -17,12 +17,16 @@ class Main
     
     protected $translator;
     
-    public function __construct($dataClass, FactoryInterface $factory, Router $router,  Translator $translator)
+    protected $translatable = false;
+    
+    public function __construct($dataClass, FactoryInterface $factory, Router $router,  
+            Translator $translator, $translatable)
     {
         $this->dataClass = $dataClass;
         $this->factory = $factory;
         $this->router = $router;
         $this->translator = $translator;
+        $this->translatable = (bool) $translatable;
     }
     
     public function create()
@@ -31,6 +35,7 @@ class Main
         $tree = $this->factory->createTree('main');
         $tree
             ->setManager($this->factory->createManager($this->dataClass))
+            ->enableTranslatable($this->translatable)
             ->addPlugin($this->factory->createPlugin('ui', array('selectLimit' => 1)))
             ->addPlugin($this->factory->createPlugin('contextmenu', array(
                 'createBtnOptions' => array(

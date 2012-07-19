@@ -1,5 +1,5 @@
 administration:
-    menu: Administaration
+    menu: administration.menu   # FIXME
 
 form:
     displayed: form.displayed   # FIXME

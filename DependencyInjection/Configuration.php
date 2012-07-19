@@ -23,9 +23,25 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neutron_admin');
 
+        $this->addLanguageSection($rootNode);
+        
         $this->addCategorySection($rootNode);
 
         return $treeBuilder;
+    }
+    
+    private function addLanguageSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('languages')
+                ->defaultValue(array())
+                    ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
     
     private function addCategorySection(ArrayNodeDefinition $node)

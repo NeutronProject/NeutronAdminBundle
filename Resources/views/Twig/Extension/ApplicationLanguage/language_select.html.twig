@@ -1,0 +1,13 @@
+<ul class="switcher">
+    <li class="dropdown js">
+        <a href="#" class="btn">Switch language<span class="caret"></span></a>
+        <ul class="menu">
+            <li class="divider heading">Available languages</li>
+            {% for key, language in languages %}
+                <li {% if currentLanguage == key %} class="active" {% endif %} >
+                    <a href="{{ path('neutron_admin.locale', {'lang': key}) }}">{{ language }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>

@@ -1,0 +1,6 @@
+form:
+    message:
+        invalid: form.message.invalid   # FIXME
+
+layout:
+    logged_in_as: layout.logged_in_as   # FIXME

@@ -30,10 +30,24 @@ class NeutronAdminExtension extends Extension
             $loader->load(sprintf('%s.xml', $basename));
         }
         
+        $container->setParameter('neutron_admin.languages', $config['languages']);
+        
+        if (empty($config['languages'])){
+            $container->setParameter('neutron_admin.translatable', false);
+        } else {
+            $container->setParameter('neutron_admin.translatable', true);
+            $container->getDefinition('neutron_admin.event_subscriber.locale_subscriber')
+                ->setPublic(true)
+                ->addTag('kernel.event_subscriber', 
+                    array('event' => 'kernel.request', 'method' => 'onKernelRequest')
+                );
+        }
+        
+        
         if (!empty($config['category'])) {
             $this->loadCategory($config['category'], $container, $loader);
         }
-
+        
     }
     
     private function loadCategory(array $config, ContainerBuilder $container, XmlFileLoader $loader)
@@ -50,6 +64,8 @@ class NeutronAdminExtension extends Extension
                 'tree_name' => 'neutron_admin.category.tree_name'       
             )
         ));
+        
+        
     }
     
     protected function remapParameters(array $config, ContainerBuilder $container, array $map)

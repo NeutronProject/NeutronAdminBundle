@@ -7,7 +7,7 @@ form:
     type: form.type   # FIXME
 
 layout:
-    app_language: 'Current application language is <strong>%language%</strong>'
+    app_language: layout.app_language   # FIXME
 
 neutron_admin:
     category:

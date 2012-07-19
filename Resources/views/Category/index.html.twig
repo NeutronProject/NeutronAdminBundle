@@ -9,13 +9,27 @@
 <div class="row">
 	<div class="grid12">
 		<article class="panel">
-		 	<header class="divider"><h2>Headings</h2></header>
+		 	<header class="divider"><h2>Headings</h2>
+		 	{{ neutron_admin_language_select() }}
+		 	</header>
 		 	<div id="messages">
     		 	{% for flashMessage in app.session.flashbag.get('neutron_admin_tree_success') %}
                     <div class="msg success"><p> {{ flashMessage }}  </p><a class="close">×</a></div>
                 {% endfor %}
 		 	</div>
-		 	{{ neutron_tree(mainTree) }}
+		 	<div class="grid3">
+    			<div class="block">
+    			    <h2>Categories</h2>
+        			<div class="container">
+        			    <div class="body">
+        			        {{ neutron_tree(mainTree) }}
+        			    </div>
+        				
+        			</div>
+    				
+    			</div>
+		    </div>
+	
 		</article>
 
 	</div>

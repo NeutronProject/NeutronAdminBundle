@@ -1,0 +1,19 @@
+externalUri:
+    blank: externalUri.blank   # FIXME
+
+    url:
+        invalid: externalUri.url.invalid   # FIXME
+
+slug:
+    already_used: slug.already_used   # FIXME
+    long: slug.long   # FIXME
+    short: slug.short   # FIXME
+
+title:
+    already_used: title.already_used   # FIXME
+    blank: title.blank   # FIXME
+    long: title.long   # FIXME
+    short: title.short   # FIXME
+
+type:
+    blank: type.blank   # FIXME

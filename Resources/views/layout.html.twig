@@ -38,7 +38,10 @@
                 <a href="{{ app.request.getBaseUrl() }}">{{ app.request.getHost() }} <small>(Neutron ALPHA 1)</small></a>
 
                 <ul id="navigation">
-                    <li>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'NeutronUserBundle')|raw }} <span class="divider">&mdash;</span></li>
+                    <li>
+                        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'NeutronUserBundle')|raw }} <span class="divider">&mdash;</span>
+                        {{ neutron_admin_language_status() }}
+                    </li>
                     <li class="dropdown">
                         <a href="javascript:;">{{ 'administration.menu'|trans }}
                             <span class="caret"></span>

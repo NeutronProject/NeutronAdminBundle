@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @Gedmo\Tree(type="nested")
+ * @Gedmo\TranslationEntity(class="Neutron\AdminBundle\Entity\Translation\MainTreeTranslation")
  * @ORM\Table(name="main_tree")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  * 
@@ -25,12 +26,17 @@ class MainTree implements TreeNodeInterface
     protected $id;
     
     /**
+     * @var string
+     * 
+     * @Gedmo\Translatable
      * @ORM\Column(name="title", type="string", length=64, nullable=false)
      */
     protected $title;
     
     /**
      * @var string
+     * 
+     * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
      */
@@ -107,6 +113,13 @@ class MainTree implements TreeNodeInterface
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     protected $children;
+    
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    private $locale;
     
     public function getId()
     {
@@ -191,5 +204,10 @@ class MainTree implements TreeNodeInterface
     public function getParent()
     {
         return $this->parent;
+    }
+    
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }

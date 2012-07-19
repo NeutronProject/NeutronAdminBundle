@@ -10,12 +10,23 @@
         <parameter key="neutron_admin.helper.form_tabs.class">Neutron\AdminBundle\Form\Helper\FormTabsHelper</parameter>
         <parameter key="neutron_admin.tree.main.class">Neutron\AdminBundle\Tree\Main</parameter>
         <parameter key="neutron_admin.controller.category.class">Neutron\AdminBundle\Controller\CategoryController</parameter>
+        <parameter key="neutron_admin.event_subscriber.locale.class">Neutron\AdminBundle\EventSubscriber\LocaleSubscriber</parameter>
+        <parameter key="neutron_admin.twig.extension.application_language.class">Neutron\AdminBundle\Twig\Extension\ApplicationLanguageExtension</parameter>
     </parameters>
     
     <services>
 
+		<service id="twig.extension.text" class="Twig_Extensions_Extension_Text">
+            <tag name="twig.extension" />
+        </service>
+        
 		<service id="neutron_admin.twig.acl" class="%neutron_admin.twig.acl.class%">
             <argument type="service" id="security.context" />
+       		<tag name="twig.extension" />
+        </service>
+        
+		<service id="neutron_admin.twig.application_language" class="%neutron_admin.twig.extension.application_language.class%">
+            <argument type="service" id="service_container" />
        		<tag name="twig.extension" />
         </service>
         
@@ -33,6 +44,7 @@
             <argument type="service" id="neutron_tree.factory" />
             <argument type="service" id="router" />
             <argument type="service" id="translator" />
+            <argument>%neutron_admin.translatable%</argument>
         </service>
         
 		<service id="neutron_tree.main" class="Neutron\TreeBundle\Tree\Tree" factory-method="create" factory-service="neutron_admin.tree.main">
@@ -52,6 +64,11 @@
         <service id="neutron_admin.menu.voter" class="Knp\Menu\Matcher\Voter\UriVoter">
 			<tag name="knp_menu.voter" />
         </service>
+        
+        <service id="neutron_admin.event_subscriber.locale_subscriber" class="%neutron_admin.event_subscriber.locale.class%" public="false">
+		    <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
+		    <argument>%stof_doctrine_extensions.default_locale%</argument>
+		</service>
 
     </services>
 

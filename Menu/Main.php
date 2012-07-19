@@ -105,6 +105,15 @@ class Main extends ContainerAware
             )
         ));
 
+        $userManagement->addChild('translations', array(
+            'label' => 'menu.translations',
+            'route' => 'jms_translation_index',
+            'extras' => array(
+                'breadcrumbs' => false,
+                'translation_domain' => 'JMSTranslationBundle'
+            ),
+        ));
+        
         $userManagement->addChild('user_management', array(
             'label' => 'menu.user_management',
             'route' => 'neutron_user_management',
