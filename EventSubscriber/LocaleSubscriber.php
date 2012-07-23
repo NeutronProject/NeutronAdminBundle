@@ -1,11 +1,22 @@
 <?php
 namespace Neutron\AdminBundle\EventSubscriber;
 
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+use Symfony\Component\HttpFoundation\Request;
+
+use FOS\UserBundle\Model\UserInterface;
+
+use Symfony\Component\Security\Core\SecurityContext;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use Gedmo\Translatable\TranslatableListener;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -34,6 +45,8 @@ class LocaleSubscriber implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {   
+        $event->getRequest()->setLocale('en');
+        
         $this->translatableListener->setTranslatableLocale(
             $event->getRequest()->getSession()->get('app_locale', $this->defaultLocale)
         );
@@ -42,7 +55,7 @@ class LocaleSubscriber implements EventSubscriberInterface
     static public function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => 'onKernelRequest',
+            KernelEvents::REQUEST => array(array('onKernelRequest', -20)),
         );
     }
 }

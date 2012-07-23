@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class CategoryController extends ContainerAware
 {
     public function indexAction()
-    {
+    {   
         $mainTree = $this->container->get('neutron.tree')
             ->get($this->container->getParameter('neutron_admin.category.tree_name'));
         

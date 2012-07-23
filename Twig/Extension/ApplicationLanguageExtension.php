@@ -57,6 +57,19 @@ class ApplicationLanguageExtension extends \Twig_Extension
             ->render('NeutronAdminBundle:Twig/Extension/ApplicationLanguage:language_status.html.twig',
                     array('language' => $language));
     }
+    
+    public function getLanguage($key)
+    {
+        if (!$this->container->getParameter('neutron_admin.translatable')){
+            return;
+        }
+        
+        if (!isset($this->languages[$key])){
+            throw new \InvalidArgumentException(sprintf('Language key "%s" odes not exist.', $key));
+        }
+        
+        return $this->languages[$key];
+    }
 
     public function getLanguages()
     {
@@ -85,6 +98,9 @@ class ApplicationLanguageExtension extends \Twig_Extension
                 
             'neutron_admin_language_status' =>
         		new \Twig_Function_Method($this, 'status', array('is_safe' => array('html'))),
+                
+            'neutron_admin_language_get' =>
+        		new \Twig_Function_Method($this, 'getLanguage'),
        
         );
     }

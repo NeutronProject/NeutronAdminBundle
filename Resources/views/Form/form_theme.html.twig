@@ -323,6 +323,20 @@
 {% endspaceless %}
 {% endblock neutron_chosen_row %}
 
+
+{% block neutron_select_row %}
+{% spaceless %}
+<div class="field">
+    {{ form_label(form, label|default(null), {'attr': {'for' : id}}) }} 
+    
+    {{ block('choice_widget') }}
+    <span class="neutron_select" style="display:none">
+        {{ configs|merge({'id': id})|json_encode|raw }}
+    </span>
+</div>
+{% endspaceless %}
+{% endblock neutron_select_row %}
+
 {% block neutron_plain_row %} 
 {% spaceless %}   
     <div class="field">
