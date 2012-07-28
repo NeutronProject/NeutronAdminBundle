@@ -69,6 +69,7 @@
 		    <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
 		    <argument>%stof_doctrine_extensions.default_locale%</argument>
 		</service>
+		
 
     </services>
 

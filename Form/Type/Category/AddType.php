@@ -77,7 +77,7 @@ class AddType extends AbstractType
                 'required' => false,
                 'translation_domain' => 'NeutronAdminBundle'
             ))
-
+            
         ;
         
         $builder->addEventSubscriber($this->subscriber);

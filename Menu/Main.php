@@ -105,14 +105,7 @@ class Main extends ContainerAware
             )
         ));
 
-        $userManagement->addChild('translations', array(
-            'label' => 'menu.translations',
-            'route' => 'jms_translation_index',
-            'extras' => array(
-                'breadcrumbs' => false,
-                'translation_domain' => 'JMSTranslationBundle'
-            ),
-        ));
+        
         
         $userManagement->addChild('user_management', array(
             'label' => 'menu.user_management',
@@ -173,6 +166,33 @@ class Main extends ContainerAware
         	    'breadcrumbs' => true,
         		'allowed_roles' => array('GOD'),
         	)
+        ));
+        
+        $userManagement->addChild('group_management', array(
+            'label' => 'menu.group.management',
+            'route' => 'neutron_user_group_management',
+            'extras' => array(
+                'breadcrumbs' => true,
+                'translation_domain' => 'NeutronUserBundle'
+            ),
+        ));
+        
+        $userManagement->addChild('role_management', array(
+            'label' => 'menu.role.management',
+            'route' => 'neutron_user_role_management',
+            'extras' => array(
+                'breadcrumbs' => true,
+                'translation_domain' => 'NeutronUserBundle'
+            ),
+        ));
+        
+        $userManagement->addChild('translations', array(
+            'label' => 'menu.translations',
+            'route' => 'jms_translation_index',
+            'extras' => array(
+                'breadcrumbs' => false,
+                'translation_domain' => 'JMSTranslationBundle'
+            ),
         ));
 
         $userManagement->addChild('divider', array(

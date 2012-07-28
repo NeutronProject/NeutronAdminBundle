@@ -1,6 +1,20 @@
 <?php
 namespace Neutron\AdminBundle\Controller;
 
+use Neutron\AdminBundle\Acl\AclManager;
+
+use Neutron\AdminBundle\AdminEvents;
+
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+
+use Neutron\AdminBundle\Event\AclObjectEvent;
+
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
+
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -55,7 +69,7 @@ class CategoryController extends ContainerAware
         
         $subscriber->setParentNode($parent);
         
-        $form->setData($node);
+        $form->setData(array('general' => $node));
         
         if ($request->isXmlHttpRequest()) {
         
@@ -63,6 +77,10 @@ class CategoryController extends ContainerAware
         
             if ($form->isValid()) {
                 $manager->persistAsLastChildOf($node, $parent);
+                
+                $this->container->get('neutron_admin.acl.manager')
+                    ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $form->get('acl')->getData());
+                
                 $request->getSession()
                     ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.created');
         
@@ -85,7 +103,15 @@ class CategoryController extends ContainerAware
         
         $template = $this->container->get('templating')
             ->render('NeutronAdminBundle:Category:create.html.twig', array(
-                'form' => $form->createView()        
+                'form' => $this->container->get('neutron_admin.form_tabs')->createView(
+                    $form, 
+                    array('label' => 'proceed'), 
+                    array(
+                        'label' => 'back', 
+                        'uri' => $this->container->get('router')->generate('neutron_admin.category.management')
+                    ),
+                    'NeutronAdminBundle'        
+                )      
             ));
         
         return new Response($template);
@@ -96,6 +122,7 @@ class CategoryController extends ContainerAware
         
         $tree = $this->container->get('neutron.tree')
             ->get($this->container->getParameter('neutron_admin.category.tree_name'));
+        
         $manager = $tree->getManager();
         
         $node = $manager->findNodeBy(array('id' => (int) $nodeId));
@@ -115,15 +142,24 @@ class CategoryController extends ContainerAware
         
         $subscriber->setParentNode($node->getParent());
         
-        $form->setData($node);
+        $form->setData(array(
+            'general' => $node, 
+            'acl' => $this->container->get('neutron_admin.acl.manager')
+                    ->getPermissions(ObjectIdentity::fromDomainObject($node))
+        ));
         
         if ($request->isXmlHttpRequest()) {
-        
+            
             $form->bindRequest($request);
         
             if ($form->isValid()) {
                 
                 $manager->updateNode($node);
+                
+                $this->container->get('neutron_admin.acl.manager')
+                    ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $form->get('acl')->getData());
+                
+              
                 
                 $request->getSession()
                     ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.updated');
@@ -147,7 +183,15 @@ class CategoryController extends ContainerAware
         
         $template = $this->container->get('templating')
             ->render('NeutronAdminBundle:Category:create.html.twig', array(
-                'form' => $form->createView()        
+                'form' => $this->container->get('neutron_admin.form_tabs')->createView(
+                    $form, 
+                    array('label' => 'proceed'), 
+                    array(
+                        'label' => 'back', 
+                        'uri' => $this->container->get('router')->generate('neutron_admin.category.management')
+                    ),
+                    'NeutronAdminBundle'        
+                )      
             ));
         
         return new Response($template);
@@ -178,6 +222,9 @@ class CategoryController extends ContainerAware
                 throw new \InvalidArgumentException(sprintf('Operation "%s" is not valid', $operation));
             }
             
+            $this->container->get('neutron_admin.acl.manager')
+                ->deleteObjectPermissions(ObjectIdentity::fromDomainObject($node));
+            
             if ($operation == 'delete'){
                 $manager->deleteNode($node);
             } elseif($operation == 'remove'){
@@ -200,6 +247,5 @@ class CategoryController extends ContainerAware
         
         return new Response($template);
     }
-    
-    
+
 }

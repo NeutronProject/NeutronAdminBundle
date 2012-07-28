@@ -16,13 +16,13 @@
         
         {% block javascripts %}
 
+            {{ neutron_prepend_javascript('files/scripts.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/jgrowl/jquery.jgrowl.js') }}
             {{ neutron_prepend_javascript('jquery/i18n/jquery-ui-i18n.js') }}
             {{ neutron_prepend_javascript('jquery/js/jquery-ui.js') }}
             {{ neutron_prepend_javascript('jquery/js/jquery.js') }}
-            {{ neutron_append_javascript('files/scripts.js') }}
-            {{ neutron_append_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
-            {{ neutron_append_javascript('jquery/plugins/jgrowl/jquery.jgrowl.js') }}
-    
+            
             {{ neutron_javascript_render() }}
     
             <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>

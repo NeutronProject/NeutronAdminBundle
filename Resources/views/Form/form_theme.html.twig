@@ -107,9 +107,15 @@
 
 {% block checkbox_widget %}
 {% spaceless %}
-<div class="controls">
+
+{% if attr.class is defined and attr.class == 'neutron-acl' %}
     <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-</div>
+{% else %}
+    <div class="controls">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    </div>
+{% endif %}
+
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
@@ -347,6 +353,17 @@
     </div>
 {% endspaceless %} 
 {% endblock neutron_plain_row %} 
+
+{% block neutron_admin_form_acl_row %} 
+{% spaceless %}   
+   <div class="field">
+    {{ block('form_label') }}
+    {% for child in form %}
+        <div style="float:right">{{ child.getVar('label') }} {{ form_widget(child, {'attr': {'class': 'neutron-acl'} }) }}</div> 
+    {% endfor %}   
+   </div>
+{% endspaceless %} 
+{% endblock neutron_admin_form_acl_row %} 
 
 
 {# Deprecated in Symfony 2.1, to be removed in 2.3 #}

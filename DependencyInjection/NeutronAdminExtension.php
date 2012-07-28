@@ -26,7 +26,7 @@ class NeutronAdminExtension extends Extension
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         
-        foreach (array('services') as $basename) {
+        foreach (array('services', 'acl') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
         }
         

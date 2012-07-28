@@ -17,6 +17,10 @@
             <argument>%neutron_admin.category.tree_data_class%</argument>
             <tag name="form.type" alias="neutron_admin_form_category_add" />
         </service>
+        
+        <service id="neutron_admin.form.type.category" class="Neutron\AdminBundle\Form\Type\CategoryFormType">
+            <tag name="form.type" alias="neutron_admin_form_category" />
+        </service>
 
         <service id="neutron_admin.form.handler.category.add" class="Neutron\AdminBundle\Form\Handler\Category\AddHandler" scope="request" public="false">
             <argument type="service" id="neutron_admin.category.form.add" />
