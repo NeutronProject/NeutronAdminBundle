@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Entity;
 
+use Neutron\AdminBundle\Acl\AclAwareInterface;
+
 use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -14,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  * 
  */
-class MainTree implements TreeNodeInterface 
+class MainTree implements TreeNodeInterface, AclAwareInterface
 {
     /**
      * @var integer
