@@ -4,11 +4,14 @@ jQuery(document).ready(function(){
 	
 	jQuery('.submit-type').click(function(){ 
 		var form = jQuery(this).closest('.form-tabbed'); 
+		var disabledElms = form.find(':input:disabled');
+		disabledElms.attr('disabled', false);
+		params = form.serializeArray(); 
 		jQuery.ajax({
 			url: form.attr('action'),
 			type: 'post',
 			dataType: 'json',
-			data: form.serializeArray(),
+			data: params,
 			beforeSend: function(){
 				jQuery.blockUI({ message: $('#block-ui-message')});
 				clearMsgs();
@@ -32,6 +35,7 @@ jQuery(document).ready(function(){
 				$("html, body").animate({scrollTop:0}, "slow");
 			}
 		});
+		disabledElms.attr('disabled', true);
 		return false;
 	});
 });
@@ -82,4 +86,5 @@ function clearMsgs()
 	jQuery('#messages').empty();
 	
 }
+
 
