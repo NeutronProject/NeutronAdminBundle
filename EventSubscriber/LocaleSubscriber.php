@@ -29,11 +29,14 @@ class LocaleSubscriber implements EventSubscriberInterface
     private $translatableListener;
     
     private $defaultLocale;
+    
+    private $backendLanguages;
 
-    public function __construct(TranslatableListener $translatableListener, $defaultLocale)
+    public function __construct(TranslatableListener $translatableListener, $defaultLocale, array $backendLanguages)
     {
         $this->translatableListener = $translatableListener;
         $this->defaultLocale = $defaultLocale;
+        $this->backendLanguages = array_keys($backendLanguages);
     }
 
     /**
@@ -44,11 +47,14 @@ class LocaleSubscriber implements EventSubscriberInterface
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
-    {   
-        $event->getRequest()->setLocale('en');
+    {  
+        $preferredBackendLanguage = $event->getRequest()->getPreferredLanguage($this->backendLanguages);
+
+        $session = $event->getRequest()->getSession();
+        $event->getRequest()->setLocale($session->get('backend_language', $preferredBackendLanguage));
         
         $this->translatableListener->setTranslatableLocale(
-            $event->getRequest()->getSession()->get('app_locale', $this->defaultLocale)
+            $session->get('frontend_language', $this->defaultLocale)
         );
     }
 

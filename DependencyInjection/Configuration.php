@@ -2,6 +2,8 @@
 
 namespace Neutron\AdminBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\ArrayNode;
+
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -35,9 +37,27 @@ class Configuration implements ConfigurationInterface
         $node
             ->children()
                 ->arrayNode('languages')
-                ->defaultValue(array())
-                    ->useAttributeAsKey('name')
-                        ->prototype('scalar')
+                ->isRequired(true)
+                ->children()
+                    ->arrayNode('backend')
+                        ->isRequired(true)
+                        ->validate()
+                            ->ifTrue(function($v){return empty($v);})
+                            ->thenInvalid('You should set at least one backend language')
+                        ->end()
+                        ->useAttributeAsKey('name')
+                            ->prototype('scalar')
+                        ->end()
+                    ->end()
+                    ->arrayNode('frontend')
+                        ->isRequired(true)
+                        ->validate()
+                            ->ifTrue(function($v){ return empty($v);})
+                            ->thenInvalid('You should set at least one frontend language')
+                        ->end()
+                        ->useAttributeAsKey('name')
+                            ->prototype('scalar')
+                        ->end()
                     ->end()
                 ->end()
             ->end()

@@ -68,6 +68,7 @@
         <service id="neutron_admin.event_subscriber.locale_subscriber" class="%neutron_admin.event_subscriber.locale.class%" public="false">
 		    <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
 		    <argument>%stof_doctrine_extensions.default_locale%</argument>
+		    <argument>%neutron_admin.languages.backend%</argument>
 		</service>
 		
 

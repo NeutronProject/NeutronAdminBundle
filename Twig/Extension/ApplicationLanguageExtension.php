@@ -29,7 +29,12 @@ class ApplicationLanguageExtension extends \Twig_Extension
     /**
      * @var array
      */
-    protected $languages;
+    protected $backendLanguages;
+    
+    /**
+     * @var array
+     */
+    protected $frontendLanguages;
 
     /**
      * Construct
@@ -39,19 +44,21 @@ class ApplicationLanguageExtension extends \Twig_Extension
     public function __construct(Container $container)
     {
         $this->container = $container;
-        $this->languages = $container->getParameter('neutron_admin.languages');
+        $this->backendLanguages = $container->getParameter('neutron_admin.languages.backend');
+        $this->frontendLanguages = $container->getParameter('neutron_admin.languages.frontend');
     }
     
     public function status()
     {
-        if (!$this->container->getParameter('neutron_admin.translatable')){
+        if (!$this->container->getParameter('neutron_admin.translatable') 
+                || count($this->frontendLanguages) < 2){
             return;
         }
         
         $key = $this->container->get('session')
-            ->get('app_locale',  $this->container->getParameter('locale'));
+            ->get('frontend_language',  $this->container->getParameter('locale'));
         
-        $language = $this->languages[$key];
+        $language = $this->frontendLanguages[$key];
         
         return $this->container->get('templating')
             ->render('NeutronAdminBundle:Twig/Extension/ApplicationLanguage:language_status.html.twig',
@@ -60,30 +67,35 @@ class ApplicationLanguageExtension extends \Twig_Extension
     
     public function getLanguage($key)
     {
-        if (!$this->container->getParameter('neutron_admin.translatable')){
-            return;
-        }
-        
-        if (!isset($this->languages[$key])){
+        if (!isset($this->frontendLanguages[$key])){
             throw new \InvalidArgumentException(sprintf('Language key "%s" odes not exist.', $key));
         }
         
-        return $this->languages[$key];
+        return $this->frontendLanguages[$key];
     }
 
     public function getLanguages()
     {
 
-        if (!$this->container->getParameter('neutron_admin.translatable')){
+        if (count($this->frontendLanguages) < 2 && count($this->backendLanguages) < 2){
             return;
         }
         
-        $currentLanguage = $this->container->get('session')
-            ->get('app_locale',  $this->container->getParameter('locale'));
+        
+        $currentBackendLanguage = $this->container->get('session')
+            ->get('backend_language',  $this->container->getParameter('locale'));
+        
+        
+        $currentFrontendLanguage = $this->container->get('session')
+            ->get('frontend_language',  $this->container->getParameter('locale'));
 
         return $this->container->get('templating')
-            ->render('NeutronAdminBundle:Twig/Extension/ApplicationLanguage:language_select.html.twig',
-                    array('languages' => $this->languages, 'currentLanguage' => $currentLanguage));
+            ->render('NeutronAdminBundle:Twig/Extension/ApplicationLanguage:language_select.html.twig',array(
+                'backendLanguages'        => $this->backendLanguages, 
+                'frontendLanguages'       => $this->frontendLanguages, 
+                'currentBackendLanguage'  => $currentBackendLanguage,
+                'currentFrontendLanguage' => $currentFrontendLanguage,
+            ));
     }
 
     /**

@@ -1,13 +1,23 @@
-<ul class="switcher">
-    <li class="dropdown js">
-        <a href="#" class="btn">Switch language<span class="caret"></span></a>
-        <ul class="menu">
-            <li class="divider heading">Available languages</li>
-            {% for key, language in languages %}
-                <li {% if currentLanguage == key %} class="active" {% endif %} >
-                    <a href="{{ path('neutron_admin.locale', {'lang': key}) }}">{{ language }}</a>
+<li class="dropdown js">
+    <a href="#">{{ 'menu.switch_language'|trans({}, 'NeutronAdminBundle') }} <span class="caret"></span></a>
+    <ul class="menu">
+        {% if backendLanguages|length > 1 %}
+            <li class="divider heading">{{ 'menu.backend_languages'|trans({}, 'NeutronAdminBundle') }}</li>
+            {% for key, backendLanguage in backendLanguages %}
+                <li {% if currentBackendLanguage == key %} class="active" {% endif %}>
+                    <a href="{{ path('neutron_admin.locale.backend', {'lang': key}) }}" >{{ backendLanguage }}</a>
                 </li>
             {% endfor %}
-        </ul>
-    </li>
-</ul>
+        {% endif %}
+        
+        {% if frontendLanguages|length > 1 %}
+            <li class="divider heading">{{ 'menu.frontend_languages'|trans({}, 'NeutronAdminBundle') }}</li>
+            {% for key, frontendLanguage in frontendLanguages %}
+                <li {% if currentFrontendLanguage == key %} class="active" {% endif %}>
+                    <a href="{{ path('neutron_admin.locale.frontend', {'lang': key}) }}" >{{ frontendLanguage }}</a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+</li>
+

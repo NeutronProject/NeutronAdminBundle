@@ -30,13 +30,14 @@ class NeutronAdminExtension extends Extension
             $loader->load(sprintf('%s.xml', $basename));
         }
         
-        if (!empty($config['languages'])){
-            $container->setParameter('neutron_admin.languages', $config['languages']);
+
+        $container->setParameter('neutron_admin.languages.backend', $config['languages']['backend']);
+        $container->setParameter('neutron_admin.languages.frontend', $config['languages']['frontend']);
             
-            $container->getDefinition('neutron_admin.event_subscriber.locale_subscriber')
-                ->setPublic(true)
-                ->addTag('kernel.event_subscriber');
-        }
+        $container->getDefinition('neutron_admin.event_subscriber.locale_subscriber')
+            ->setPublic(true)
+            ->addTag('kernel.event_subscriber');
+        
         
         
         if (!empty($config['category'])) {

@@ -39,9 +39,12 @@
 
                 <ul id="navigation">
                     <li>
-                        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'NeutronUserBundle')|raw }} <span class="divider">&mdash;</span>
-                        {{ neutron_admin_language_status() }}
+                        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'NeutronUserBundle')|raw }} 
+                        <span class="divider">&mdash;</span>
                     </li>
+                    
+                    {{ neutron_admin_language_select() }}
+                    
                     <li class="dropdown">
                         <a href="javascript:;">{{ 'administration.menu'|trans }}
                             <span class="caret"></span>
