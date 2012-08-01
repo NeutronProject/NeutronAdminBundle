@@ -4,25 +4,17 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
         http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
-    <class name="Neutron\AdminBundle\Entity\MainTree">
-        
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-	        <option name="fields">title</option>
-	        <option name="message">title.already_used</option>
-	        <option name="groups">
-                <value>create</value>
-               	<value>update</value>
-            </option>
-   	    </constraint>    
+    <class name="Neutron\AdminBundle\Entity\MainTree">   
    	       
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-	        <option name="fields">slug</option>
-	        <option name="message">slug.already_used</option>
-	        <option name="groups">
-                <value>category.slug</value>
-            </option>
-   	    </constraint>       
-
+              
+			<constraint name="Neutron\ComponentBundle\Validator\Constraint\UniqueTranslatableProperty">
+		        <option name="property">slug</option>
+		        <option name="enableSlugFilter">true</option>
+		        <option name="message">slug.already_used</option>
+		        <option name="groups">
+	                <value>category.slug</value>
+	            </option>
+   	    	</constraint>
 
         <property name="title">
         	<constraint name="NotBlank">
@@ -50,7 +42,7 @@
         </property>
         
         <property name="slug">
-        	
+        	 
             <constraint name="MinLength">
                 <option name="limit">2</option>
                 <option name="message">slug.short</option>

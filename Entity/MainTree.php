@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @Gedmo\Tree(type="nested")
  * @Gedmo\TranslationEntity(class="Neutron\AdminBundle\Entity\Translation\MainTreeTranslation")
  * @ORM\Table(name="main_tree")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Entity(repositoryClass="Neutron\AdminBundle\Entity\Repository\MainTreeRepository")
  * 
  */
 class MainTree implements TreeNodeInterface
@@ -37,7 +37,6 @@ class MainTree implements TreeNodeInterface
      * @var string
      * 
      * @Gedmo\Translatable
-     * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
      */
     protected $slug;

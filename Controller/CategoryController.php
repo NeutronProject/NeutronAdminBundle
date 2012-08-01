@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Controller;
 
+use Neutron\Bundle\DataGridBundle\DataGrid\Provider\ContainerAwareProvider;
+
 use Neutron\AdminBundle\Acl\AclManager;
 
 use Neutron\AdminBundle\AdminEvents;
@@ -42,8 +44,12 @@ class CategoryController extends ContainerAware
         $mainTree = $this->container->get('neutron.tree')
             ->get($this->container->getParameter('neutron_admin.category.tree_name'));
         
+        $grid = $this->container->get('neutron.datagrid')->get('tree_management');
+        
         $template = $this->container->get('templating')
-            ->render('NeutronAdminBundle:Category:index.html.twig', array('mainTree' => $mainTree));
+            ->render('NeutronAdminBundle:Category:index.html.twig', 
+                array('mainTree' => $mainTree, 'grid' => $grid)
+            );
         
         return new Response($template);
     }

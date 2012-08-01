@@ -3,7 +3,9 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+    <parameters>
+        <parameter key="neutron_admin.datagrid.tree_management.class">Neutron\AdminBundle\DataGrid\TreeManagement</parameter>
+    </parameters>
     
     <services>
 
@@ -29,6 +31,35 @@
             <argument type="service" id="router" />
             <argument type="service" id="neutron.tree" />
             <argument>%neutron_admin.category.tree_name%</argument>
+        </service>
+        
+        <service id="neutron_admin.datagrid.tree_management" 
+        	class="%neutron_admin.datagrid.tree_management.class%"
+        	scope="request"
+       	>
+        	<argument type="service" id="neutron_data_grid.factory" />
+        	<argument type="service" id="doctrine.orm.entity_manager" />
+        	<argument type="service" id="translator" />
+        	<argument type="service" id="router" />
+        </service>
+        
+        <service id="neutron_admin.datagrid.factory.tree_management" 
+        	class="Neutron\Bundle\DataGridBundle\DataGrid\DataGrid"
+        	factory-service="neutron_admin.datagrid.tree_management"
+        	factory-method="build"
+        >
+        	<tag name="neutron_data_grid.datagrid" alias="tree_management" />
+        </service>
+        
+        <service id="neutron_admin.event_listener.datagrid.tree_management" 
+        	class="Neutron\AdminBundle\EventListener\DataGrid\MainTreeListener">
+            <argument type="service" id="translator" />
+            <tag name="kernel.event_listener" event="neutron_datagrid.onDataResponse" method="onDataResponse" />
+        </service>
+        
+        <service id="neutron_admin.event_subscriber.doctrine.main_tree" class="Neutron\AdminBundle\EventSubscriber\Doctrine\MainTreeSubscriber">
+            <argument type="service" id="neutron_component.util.filter.slug" />
+            <tag name="doctrine.event_subscriber" connection="default" />
         </service>
 
     </services>
