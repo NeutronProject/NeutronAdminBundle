@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\AdminBundle\Command;
 
-use Neutron\TreeBundle\Tree\TreeModelInterface;
+use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 use Neutron\TreeBundle\Model\TreeManagerInterface;
 
@@ -83,7 +83,7 @@ class TreeCommand extends ContainerAwareCommand
         $output->writeln('Root node has beed created.');
     }
     
-    protected function updateRoot(TreeModelInterface $root, TreeManagerInterface $manager, 
+    protected function updateRoot(TreeNodeInterface $root, TreeManagerInterface $manager, 
             $title, OutputInterface $output, $recreate = false)
     {
         if ($recreate){

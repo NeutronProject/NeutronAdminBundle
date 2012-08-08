@@ -3,23 +3,26 @@ jQuery(document).ready(function(){
 	$(document).ajaxStop($.unblockUI); 
 	
 	jQuery('.submit-type').click(function(){ 
-		var form = jQuery(this).closest('.neutron_form_simple'); 
+		var form = jQuery(this).closest('.neutron-form'); 
+		var message = jQuery('#block-ui-message').html();
+		var disabledElms = form.find(':input:disabled');
+		disabledElms.attr('disabled', false);
+		var params = form.serializeArray(); 
 		jQuery.ajax({
 			url: form.attr('action'),
 			type: 'post',
 			dataType: 'json',
-			data: form.serializeArray(),
+			data: params,
 			beforeSend: function(){
-				jQuery.blockUI({ message: $('#block-ui-message')});
+				jQuery.blockUI({ message: message});
 				clearMsgs();
 			},
 			success: function(data, textStatus, jqXHR){
 				if(data.success == true){
-					if(data.redirect_uri != 'undefined'){
+					if(data.redirect_uri != undefined){
 						window.location = data.redirect_uri;
 					}
 				} else if (data.success == false){ 
-					console.log(data.errors);
 					buildErrors(data.errors);
 					buildSuccessStatus();
 					jQuery('.field-error').fadeIn('slow').fadeOut().fadeIn('slow');
@@ -32,19 +35,27 @@ jQuery(document).ready(function(){
 				$("html, body").animate({scrollTop:0}, "slow");
 			}
 		});
+		disabledElms.attr('disabled', true);
 		return false;
 	});
 });
 
 function buildErrors(errors){
+	var tab = false;
 	
 	if(!jQuery.isPlainObject(errors)){
 		return false;
 	}
 	
 	jQuery.each(errors, function(k,v){ 
+		if(tab === false && jQuery.isPlainObject(v)){
+			tab = 'tab-' + k;
+			jQuery('[href="#'+ tab +'"]').click();
+		}
+		
 		buildErrorMsgs(k,v);
 		buildErrors(v);
+		
 	});
 	
 	
@@ -75,4 +86,5 @@ function clearMsgs()
 	jQuery('#messages').empty();
 	
 }
+
 

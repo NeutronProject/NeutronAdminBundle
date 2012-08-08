@@ -1,8 +1,6 @@
 <?php
 namespace Neutron\AdminBundle\Form\Type;
 
-
-
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +19,6 @@ class CategoryFormType extends AbstractType
             'masks' => array(
                 'DELETE'   => 'Delete',
                 'EDIT'     => 'Edit',
-                'CREATE'   => 'Create',
                 'VIEW'     => 'View',
             ),
         ));

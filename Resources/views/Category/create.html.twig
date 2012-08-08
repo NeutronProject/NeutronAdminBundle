@@ -10,7 +10,13 @@
 	<div class="grid12">
 		<article class="panel">
 		 	<header><h2>Headings</h2></header>
-            {{ form|raw }}
+            {{ neutron_form_tabs(
+                form, 
+                {'submit_label': 'form.proceed', 'translation_domain': 'NeutronAdminBundle'},
+                {
+                    'cancel': {'label': 'cancel', 'style': 'btn action', 'url': path('neutron_admin.category.management')}
+                }
+            ) }}
        
 		</article>
 

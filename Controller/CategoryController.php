@@ -109,15 +109,7 @@ class CategoryController extends ContainerAware
         
         $template = $this->container->get('templating')
             ->render('NeutronAdminBundle:Category:create.html.twig', array(
-                'form' => $this->container->get('neutron_admin.form_tabs')->createView(
-                    $form, 
-                    array('label' => 'proceed'), 
-                    array(
-                        'label' => 'back', 
-                        'uri' => $this->container->get('router')->generate('neutron_admin.category.management')
-                    ),
-                    'NeutronAdminBundle'        
-                )      
+                'form' => $form->createView()    
             ));
         
         return new Response($template);
@@ -189,15 +181,7 @@ class CategoryController extends ContainerAware
         
         $template = $this->container->get('templating')
             ->render('NeutronAdminBundle:Category:create.html.twig', array(
-                'form' => $this->container->get('neutron_admin.form_tabs')->createView(
-                    $form, 
-                    array('label' => 'proceed'), 
-                    array(
-                        'label' => 'back', 
-                        'uri' => $this->container->get('router')->generate('neutron_admin.category.management')
-                    ),
-                    'NeutronAdminBundle'        
-                )      
+                'form' => $form->createView()   
             ));
         
         return new Response($template);

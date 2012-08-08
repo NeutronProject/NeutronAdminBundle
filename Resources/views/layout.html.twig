@@ -5,10 +5,11 @@
         <title>{% block headTitle %}Neutron Backend{% endblock %}</title>
         
         {% block stylesheets %}
+            {{ neutron_prepend_stylesheet('files/ui-icons-fix.css') }}
             {{ neutron_prepend_stylesheet('files/styles.css') }}
-            {{ neutron_prepend_stylesheet('jquery/css/smoothness/jquery-ui.css') }}
             {{ neutron_prepend_stylesheet('jquery/plugins/uniform/css/uniform.default.css') }}
             {{ neutron_prepend_stylesheet('jquery/plugins/jgrowl/jquery.jgrowl.css') }}
+            {{ neutron_prepend_stylesheet('jquery/css/smoothness/jquery-ui.css') }}
     
             {{ neutron_stylesheet_render() }}
 
@@ -16,7 +17,9 @@
         
         {% block javascripts %}
 
+            {{ neutron_prepend_javascript('bundles/neutronadmin/js/neutron-form.js') }}
             {{ neutron_prepend_javascript('files/scripts.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/blockui/jquery.blockUI.js') }}
             {{ neutron_prepend_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
             {{ neutron_prepend_javascript('jquery/plugins/jgrowl/jquery.jgrowl.js') }}
             {{ neutron_prepend_javascript('jquery/i18n/jquery-ui-i18n.js') }}
@@ -28,14 +31,16 @@
             <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
             <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         
-            <!--[if lt IE 9]><script src="{{ neutron_base_url() }}files/assets/html5shiv.js"></script><![endif]-->
+            <!--[if lt IE 9]><script src="{{ site_url }}files/assets/html5shiv.js"></script><![endif]-->
 
         {% endblock %}
+        
+    
     </head>
     <body>
         <div id="page">
             <div id="top">
-                <a href="{{ app.request.getBaseUrl() }}">{{ app.request.getHost() }} <small>(Neutron ALPHA 1)</small></a>
+                <a href="{{ site_url }}">{{ app.request.getHost() }} <small>(Neutron ALPHA 1)</small></a>
 
                 <ul id="navigation">
                     <li>
@@ -88,7 +93,7 @@
 
         {% block footer %}
         <footer>
-            <p>&copy; 2012 by <a href="http:zend.bg">NeutronLabs</a></p>
+            <p>&copy; 2012 by <a href="http:neutronlabs.bg">NeutronLabs</a></p>
         </footer>
         {% endblock %}
         

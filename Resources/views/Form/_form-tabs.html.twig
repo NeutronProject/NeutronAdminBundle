@@ -7,12 +7,12 @@
     <div class="form-tabs">
         <ul>
             {% for key, child in  form %}
-                <li><a href="#tab-{{ child.getVar('id') }}">{{ key|trans({}, translation_domain) }}</a></li>
+                <li><a href="#tab-{{ child.vars['id'] }}">{{ key|trans({}, translation_domain) }}</a></li>
             {% endfor %}
         </ul>
         <fieldset class="form">
         {% for key, child in  form %}
-        	<div id="tab-{{ child.getVar('id') }}">
+        	<div id="tab-{{ child.vars['id'] }}">
                 {{ form_widget(child) }}
             </div>
     	{% endfor %}

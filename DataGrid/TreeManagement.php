@@ -142,7 +142,6 @@ class TreeManagement
             ->select(array('t.id', 't.title', 't.slug', 't.type', 't.lvl', 't.enabled', 't.displayed'))
             ->from('NeutronAdminBundle:MainTree', 't')
             ->where($qb->expr()->neq('t.type', $conn->quote('root')))
-            ->addOrderBy('t.lft')
         ;
         
         return $qb;

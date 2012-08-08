@@ -1,9 +1,9 @@
 <?php
 namespace Neutron\AdminBundle\Form\Type;
 
-use Neutron\Bundle\AsseticBundle\Controller\AsseticController;
+use Symfony\Component\Form\FormView;
 
-use Symfony\Component\Form\FormViewInterface;
+use Neutron\Bundle\AsseticBundle\Controller\AsseticController;
 
 use Neutron\UserBundle\Model\RoleManagerInterface;
 
@@ -30,7 +30,7 @@ class AclCollectionType extends AbstractType
         $this->assetic = $assetic;
     }
     
-    public function buildView(FormViewInterface $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $this->assetic->prependJavascript('bundles/neutronadmin/js/acl.js');
     }
