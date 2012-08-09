@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Form\Type\Category;
 
+use Neutron\PluginBundle\Provider\PluginProviderInterface;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -11,17 +13,21 @@ use Symfony\Component\Form\AbstractType;
 
 use Symfony\Component\Form\FormInterface;
 
-class AddType extends AbstractType
+class GeneralType extends AbstractType
 {
     
     protected $subscriber;
     
     protected $class;
     
-    public function __construct(EventSubscriberInterface $subscriber, $class)
+    protected $pluginProvider;
+    
+    public function __construct(EventSubscriberInterface $subscriber, $class, 
+            PluginProviderInterface $pluginProvider)
     {
         $this->subscriber = $subscriber;
         $this->class = $class;
+        $this->pluginProvider = $pluginProvider;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -35,14 +41,7 @@ class AddType extends AbstractType
             ->add('slug', 'text', array(
                 'label' => 'form.slug',
                 'translation_domain' => 'NeutronAdminBundle'
-            ))
-            
-            ->add('externalUri', 'url', array(
-                'label' => 'form.external_uri',
-                'attr' => array(),
-                'empty_data' => null,
-                'translation_domain' => 'NeutronAdminBundle'
-            ))
+            ))        
             
             ->add('linkTarget', 'choice', array(
                 'choices' => array('_self' => 'from.target.self', '_blank' => 'form.target.blank'),
@@ -55,7 +54,7 @@ class AddType extends AbstractType
             ))
             
             ->add('type', 'choice', array(
-		        'choices' => $this->getTypes(),
+		        'choices' => $this->pluginProvider->getAsOptions(),
 		        'multiple' => false,
 		        'expanded' => false,
 		        'attr' => array('class' => 'uniform'),
@@ -98,13 +97,7 @@ class AddType extends AbstractType
                 } else {
                     $validationGroups = array_merge($validationGroups, array('create'));
                 }
-                
-                if ($data->getType() == 'neutron.plugin.external'){
-                    $validationGroups = array_merge($validationGroups, array('category.external'));
-                } else {
-                    $validationGroups = array_merge($validationGroups, array('category.slug'));
-                }
-                
+
                 return $validationGroups;
             },
         ));
@@ -112,15 +105,7 @@ class AddType extends AbstractType
     
     public function getName()
     {
-        return 'neutron_admin_form_category_add';
+        return 'neutron_admin_form_category_general';
     }
     
-    private function getTypes()
-    {
-        return array(
-            'neutron.plugin.external' => 'external',        
-            'neutron.plugin.page' => 'page',        
-            'neutron.plugin.news' => 'news',        
-        );
-    }
 }

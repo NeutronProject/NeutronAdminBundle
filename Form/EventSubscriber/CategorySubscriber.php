@@ -9,6 +9,8 @@
  */
 namespace Neutron\AdminBundle\Form\EventSubscriber;
 
+use Neutron\PluginBundle\Provider\PluginProviderInterface;
+
 use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 use Symfony\Component\Form\FormEvent;
@@ -26,23 +28,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @since 1.0
  */
 class CategorySubscriber implements EventSubscriberInterface
-{
-    protected $parentNode;
+{   
+    protected $pluginProvider;
     
-    public function setParentNode(TreeNodeInterface $parentNode)
+    public function __construct(PluginProviderInterface $pluginProvider)
     {
-        $this->parentNode = $parentNode;
-        
-        return $this;
-    }
-    
-    public function getParentNode()
-    {
-        if (null === $this->parentNode){
-            throw new \RuntimeException('Parent node is not set');
-        }
-        
-        return $this->parentNode;
+        $this->pluginProvider = $pluginProvider;
     }
     
     public function preSetData(FormEvent $event)
@@ -58,13 +49,15 @@ class CategorySubscriber implements EventSubscriberInterface
             $form->remove('enabled');
             $form->remove('displayed');
             
-            $parentType = $this->getParentNode()->getType();
+            
+            $parentType = $data->getParent()->getType();
             
             if ($parentType == 'root'){
                 return;
             }
             
-            $opt = $this->getTypeMetadata($parentType);
+            $plugin = $this->pluginProvider->get($parentType);
+            $opt = $plugin->getTreeOptions();
             
             if ($opt['children_strategy'] == 'self'){
                 $form->remove('type');
@@ -75,33 +68,11 @@ class CategorySubscriber implements EventSubscriberInterface
             
         } else {
             $form->remove('type');
-            
         }
-        
-        if ($data->getType() == 'neutron.plugin.external'){
-            $form->remove('slug');
-        }
-        
         
 
     }
     
-    public function postBind(FormEvent $event)
-    {
-        $form = $event->getForm();
-        $data = $event->getData();
-        
-        if (empty($data)) {
-            return;
-        }
-        
-        if ($data->getType() == 'neutron.plugin.external'){
-            $data->setSlug(null);
-        } else {
-            $data->setExternalUri(null);
-        }
-    }
-
     /**
      * Subscription for Form Events
      */
@@ -109,33 +80,7 @@ class CategorySubscriber implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::POST_BIND => 'postBind',
         );
     }
-    
-    private function getTypeMetadata($type)
-    {
-        $metadata = $this->getTypesMetadata();
-        
-        return $metadata[$type];
-    }
-    
-    private function getTypesMetadata()
-    {
-        return array(
-            
-           'neutron.plugin.page' => array(
-                'name' => 'neutron.plugin.page',
-                'children_strategy' => 'all',
-                'start_drag' => true,
-                'move_node' => true,
-                'select_node' => true,
-                'hover_node' => true,
-                'disable_create_btn' => false,
-                'disable_update_btn' => false,
-                'disable_delete_btn' => false,
-            )
-    
-        );
-    }
+
 }

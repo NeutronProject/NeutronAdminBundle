@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Tree;
 
+use Neutron\PluginBundle\Provider\PluginProviderInterface;
+
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -17,15 +19,18 @@ class Main
     
     protected $translator;
     
+    protected $pluginProvider;
+    
     protected $translatable = false;
     
     public function __construct($dataClass, FactoryInterface $factory, Router $router,  
-            Translator $translator, $translatable)
+            Translator $translator, PluginProviderInterface $pluginProvider, $translatable)
     {
         $this->dataClass = $dataClass;
         $this->factory = $factory;
         $this->router = $router;
         $this->translator = $translator;
+        $this->pluginProvider = $pluginProvider;
         $this->translatable = (bool) $translatable;
     }
     
@@ -58,28 +63,9 @@ class Main
             ->addPlugin($this->factory->createPlugin('crrm'))
             ->addPlugin($this->factory->createPlugin('themes'))
             ->addPlugin($this->factory->createPlugin('cookies'))
-            ->addPlugin($this->factory->createPlugin('types', $this->getTypesMetadata()))
+            ->addPlugin($this->factory->createPlugin('types', $this->pluginProvider->getTreeOptions()))
         ;
         
         return $tree;
-    }
-    
-    private function getTypesMetadata()
-    {
-        return array(
-            
-            array(
-                'name' => 'neutron.plugin.page',
-                'children_strategy' => 'all',
-                'start_drag' => true,
-                'move_node' => true,
-                'select_node' => true,
-                'hover_node' => true,
-                'disable_create_btn' => false,
-                'disable_update_btn' => false,
-                'disable_delete_btn' => false,
-            )
-            
-        );
     }
 }

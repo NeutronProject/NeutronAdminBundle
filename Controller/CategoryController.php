@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Controller;
 
+use Neutron\PluginBundle\Provider\PluginProvider;
+
 use Neutron\Bundle\DataGridBundle\DataGrid\Provider\ContainerAwareProvider;
 
 use Neutron\AdminBundle\Acl\AclManager;
@@ -57,54 +59,15 @@ class CategoryController extends ContainerAware
     public function createAction($parentId)
     {
         
-        $tree = $this->container->get('neutron.tree')
-            ->get($this->container->getParameter('neutron_admin.category.tree_name'));
-        $manager = $tree->getManager();
+        $node = $this->getNode($parentId);
         
-        $node = $manager->createNode();
-        $parent = $manager->findNodeBy(array('id' => (int) $parentId));
-        
-        if (!$parent){
-            throw new NotFoundHttpException();
-        }
-        
-        $form = $this->container->get('neutron_admin.category.form.add');
-        $request = $this->container->get('request');
-        
-        $subscriber = $this->container->get('neutron_admin.form.event_subscriber.category');
-        
-        $subscriber->setParentNode($parent);
+        $form = $this->container->get('neutron_admin.form.category');
+        $handler = $this->container->get('neutron_admin.form.handler.category');
         
         $form->setData(array('general' => $node));
         
-        if ($request->isXmlHttpRequest()) {
-        
-            $form->bindRequest($request);
-        
-            if ($form->isValid()) {
-                $manager->persistAsLastChildOf($node, $parent);
-                
-                $this->container->get('neutron_admin.acl.manager')
-                    ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $form->get('acl')->getData());
-                
-                $request->getSession()
-                    ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.created');
-        
-                $result = array(
-                    'success' => true,
-                    'redirect_uri' => $this->container->get('router')->generate('neutron_admin.category.management')
-                );
-        
-            } else {
-                $result = array(
-                    'success' => false,
-                    'errors' => $this->container->get('neutron_component.form.helper.form_helper')
-                        ->getErrorMessages($form, 'NeutronAdminBundle')
-                );
-            }
-        
-            return new Response(json_encode($result));
-        
+        if (null !== $handler->process()){
+            return new Response(json_encode($handler->getResult()));
         }
         
         $template = $this->container->get('templating')
@@ -117,74 +80,19 @@ class CategoryController extends ContainerAware
     
     public function updateAction($nodeId)
     {
+        $treeManager = $this->container->get('neutron_tree.manager.factory')
+            ->getManagerForClass($this->container->getParameter('neutron_admin.category.tree_data_class'));
         
-        $tree = $this->container->get('neutron.tree')
-            ->get($this->container->getParameter('neutron_admin.category.tree_name'));
+        $category = $treeManager->findNodeBy(array('id' => $nodeId));
         
-        $manager = $tree->getManager();
-        
-        $node = $manager->findNodeBy(array('id' => (int) $nodeId));
-        
-        if (!$node){
+        if (!$category){
             throw new NotFoundHttpException();
         }
         
-        if ($manager->isRoot($node)){
-            throw new \RuntimeException('You can NOT modify root node');
-        }
-        
-        $form = $this->container->get('neutron_admin.category.form.add');
-        $request = $this->container->get('request');
-        
-        $subscriber = $this->container->get('neutron_admin.form.event_subscriber.category');
-        
-        $subscriber->setParentNode($node->getParent());
-        
-        $form->setData(array(
-            'general' => $node, 
-            'acl' => $this->container->get('neutron_admin.acl.manager')
-                    ->getPermissions(ObjectIdentity::fromDomainObject($node))
-        ));
-        
-        if ($request->isXmlHttpRequest()) {
-            
-            $form->bindRequest($request);
-        
-            if ($form->isValid()) {
-                
-                $manager->updateNode($node);
-                
-                $this->container->get('neutron_admin.acl.manager')
-                    ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $form->get('acl')->getData());
-                
-              
-                
-                $request->getSession()
-                    ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.updated');
-        
-                $result = array(
-                    'success' => true,
-                    'redirect_uri' => $this->container->get('router')->generate('neutron_admin.category.management')
-                );
-        
-            } else {
-                $result = array(
-                    'success' => false,
-                    'errors' => $this->container->get('neutron_component.form.helper.form_helper')
-                        ->getErrorMessages($form, 'NeutronAdminBundle')
-                );
-            }
-        
-            return new Response(json_encode($result));
-        
-        }
-        
-        $template = $this->container->get('templating')
-            ->render('NeutronAdminBundle:Category:create.html.twig', array(
-                'form' => $form->createView()   
-            ));
-        
-        return new Response($template);
+        $pluginProvider = $this->container->get('neutron_plugin.provider');
+        $proceedRoute = $pluginProvider->get($category->getType())->getProceedRoute();
+        $url = $this->container->get('router')->generate($proceedRoute, array('id' => $category->getId()));
+        return new RedirectResponse($url);
     }
     
     public function deleteAction($nodeId)
@@ -236,6 +144,23 @@ class CategoryController extends ContainerAware
             ));
         
         return new Response($template);
+    }
+    
+    private function getNode($parentId)
+    {
+        $manager = $this->container->get('neutron_tree.manager.factory')
+            ->getManagerForClass($this->container->getParameter('neutron_admin.category.tree_data_class'));
+        
+        $node = $manager->createNode();
+        $parent = $manager->findNodeBy(array('id' => (int) $parentId));
+        
+        if (!$parent){
+            throw new NotFoundHttpException();
+        }
+        
+        $node->setParent($parent);
+        
+        return $node;
     }
 
 }

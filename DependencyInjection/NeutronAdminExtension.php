@@ -50,7 +50,7 @@ class NeutronAdminExtension extends Extension
     {
         $loader->load('category.xml');
     
-        $container->setAlias('neutron_admin.category.form.handler.add', $config['form']['handler']);
+        $container->setAlias('neutron_admin.form.handler.category', $config['form']['handler']);
         
         
         $this->remapParametersNamespaces($config, $container, array(

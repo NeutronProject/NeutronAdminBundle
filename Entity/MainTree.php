@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Neutron\AdminBundle\Entity\Repository\MainTreeRepository")
  * 
  */
-class MainTree implements TreeNodeInterface
+class MainTree implements TreeNodeInterface 
 {
     /**
      * @var integer
@@ -37,7 +37,7 @@ class MainTree implements TreeNodeInterface
      * @var string
      * 
      * @Gedmo\Translatable
-     * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
+     * @ORM\Column(type="string", name="slug", length=255, nullable=false, unique=true)
      */
     protected $slug;
     
@@ -47,13 +47,6 @@ class MainTree implements TreeNodeInterface
      * @ORM\Column(type="string", name="type", length=255, nullable=false, unique=false)
      */
     protected $type = 'default';
-    
-    /**
-     * @var string 
-     *
-     * @ORM\Column(type="text", name="external_uri", nullable=true)
-     */
-    protected $externalUri;
     
     /**
      * @var string 
@@ -153,16 +146,6 @@ class MainTree implements TreeNodeInterface
     public function getType()
     {
         return $this->type;
-    }
-    
-    public function setExternalUri($uri)
-    {
-        $this->externalUri = $uri;
-    }
-    
-    public function getExternalUri()
-    {
-        return $this->externalUri;
     }
     
     public function setLinkTarget($target)

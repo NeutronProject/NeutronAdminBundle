@@ -78,7 +78,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('type')->defaultValue('neutron_admin_form_category')->end()
-                                ->scalarNode('handler')->defaultValue('neutron_admin.form.handler.category.add')->end()
+                                ->scalarNode('handler')->defaultValue('neutron_admin.form.handler.category.default')->end()
                                 ->scalarNode('name')->defaultValue('neutron_admin_form_category')->end()
                             ->end()
                         ->end()

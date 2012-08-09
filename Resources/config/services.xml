@@ -45,6 +45,7 @@
             <argument type="service" id="neutron_tree.factory" />
             <argument type="service" id="router" />
             <argument type="service" id="translator" />
+            <argument type="service" id="neutron_plugin.provider" />
             <argument>%neutron_admin.translatable%</argument>
         </service>
         
@@ -59,7 +60,7 @@
         </service>
         
         <service id="neutron_admin.form.event_subscriber.category" class="Neutron\AdminBundle\Form\EventSubscriber\CategorySubscriber">
-			
+			<argument type="service"  id="neutron_plugin.provider" />
         </service>
         
         <service id="neutron_admin.menu.voter" class="Knp\Menu\Matcher\Voter\UriVoter">
