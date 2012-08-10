@@ -48,7 +48,7 @@ class CategorySubscriber implements EventSubscriberInterface
         if (!$data->getId()) {
             $form->remove('enabled');
             $form->remove('displayed');
-            
+            $form->remove('slug');
             
             $parentType = $data->getParent()->getType();
             

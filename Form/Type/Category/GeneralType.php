@@ -93,9 +93,9 @@ class GeneralType extends AbstractType
                 $validationGroups = array();
                 
                 if ($data->getId()){
-                    $validationGroups = array_merge($validationGroups, array('update'));
+                    $validationGroups = array_merge($validationGroups, array('category.update'));
                 } else {
-                    $validationGroups = array_merge($validationGroups, array('create'));
+                    $validationGroups = array_merge($validationGroups, array('category.create'));
                 }
 
                 return $validationGroups;

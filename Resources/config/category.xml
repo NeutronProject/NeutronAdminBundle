@@ -32,6 +32,7 @@
             <argument type="service" id="neutron_component.form.helper.form_helper" />
             <argument type="service" id="request" />
             <argument type="service" id="router" />
+            <argument type="service" id="translator" />
             <argument type="service" id="neutron_admin.acl.manager" />
             <argument type="service" id="neutron_plugin.provider" />
             <argument type="service" id="neutron_tree.manager.factory" />

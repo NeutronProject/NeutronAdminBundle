@@ -10,11 +10,6 @@
 	<div class="grid12">
 		<article class="panel">
 		 	<header class="divider"><h2>Headings</h2></header>
-		 	<div id="messages">
-    		 	{% for flashMessage in app.session.flashbag.get('neutron_admin_tree_success') %}
-                    <div class="msg success"><p> {{ flashMessage }}  </p><a class="close">×</a></div>
-                {% endfor %}
-		 	</div>
 		 	<div class="grid3">
     			<div class="block">
     			    <h2>Categories</h2>
@@ -23,19 +18,14 @@
         			        {{ neutron_tree(mainTree) }}
         			    </div>
         			</div>
-    				
     			</div>
 		    </div>
 		    <div class="grid8">
     		    <article class="panel">
-    		 	    
-                    {{ neutron_datagrid(grid) }}
-           
+    		 	    {{ neutron_datagrid(grid) }}          
     		    </article>
 		    </div>
-	
 		</article>
-
 	</div>
 </div>
 {% endblock %}

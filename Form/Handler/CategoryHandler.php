@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\Form\Handler;
 
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+
 use Doctrine\ORM\EntityManager;
 
 use Neutron\PluginBundle\Provider\PluginProviderInterface;
@@ -26,6 +28,7 @@ class CategoryHandler implements FormHandlerInterface
     protected $em;
     protected $request;
     protected $router;
+    protected $translator;
     protected $form;
     protected $formHelper;
     protected $treeManager;
@@ -34,7 +37,7 @@ class CategoryHandler implements FormHandlerInterface
     protected $result;
 
 
-    public function __construct(EntityManager $em, Form $form, FormHelper $formHelper, Request $request, Router $router, 
+    public function __construct(EntityManager $em, Form $form, FormHelper $formHelper, Request $request, Router $router, Translator $translator,
             AclManagerInterface $aclManager, PluginProviderInterface $pluginProvider, TreeManagerFactoryInterface $treeManager, $treeClass)
     {
         $this->em = $em;
@@ -42,6 +45,7 @@ class CategoryHandler implements FormHandlerInterface
         $this->formHelper = $formHelper;
         $this->request = $request;
         $this->router = $router;
+        $this->translator = $translator;
         $this->aclManager = $aclManager;
         $this->pluginProvider =$pluginProvider;
         $this->treeManager = $treeManager->getManagerForClass($treeClass);
@@ -56,26 +60,20 @@ class CategoryHandler implements FormHandlerInterface
             
             if ($this->form->isValid()) {
                 
-                $treeManager = $this->treeManager;
-                $aclManager = $this->aclManager;
-                
-                $node = $this->form->get('general')->getData();
-                $acl = $this->form->get('acl')->getData();
-                
-                $this->em->transactional(function(EntityManager $em) use ($treeManager, $aclManager, $node, $acl){
-                    $treeManager->persistAsLastChildOf($node, $node->getParent());
-                    $aclManager
-                        ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $acl);
-                });
+                $this->onSuccess();
 
-                $route = $this->pluginProvider->get($node->getType())->getRoute();
+                $route = $this->pluginProvider
+                    ->get($this->form->get('general')->getData()->getType())->getRoute();
                 
                 $this->request->getSession()
-                    ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.created');
+                    ->getFlashBag()->add('neutron.form.success', array(
+                        'type' => 'success', 
+                        'body' => $this->translator->trans('category.flash.created', array(), 'NeutronAdminBundle')
+                    ));
              
                 $this->result = array(
                     'success' => true,
-                    'redirect_uri' => $this->router->generate($route, array('id' => $node->getId()))
+                    'redirect_uri' => $this->router->generate($route, array('id' => $this->form->get('general')->getData()->getId()))
                 );
                 
                 return true;
@@ -95,6 +93,21 @@ class CategoryHandler implements FormHandlerInterface
     public function getResult()
     {
         return $this->result;
+    }
+    
+    protected function onSuccess()
+    {
+        $treeManager = $this->treeManager;
+        $aclManager = $this->aclManager;
+        
+        $node = $this->form->get('general')->getData();
+        $acl = $this->form->get('acl')->getData();
+        
+        $this->em->transactional(function(EntityManager $em) use ($treeManager, $aclManager, $node, $acl){
+            $treeManager->persistAsLastChildOf($node, $node->getParent());
+            $aclManager
+                ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $acl);
+        });
     }
    
 }

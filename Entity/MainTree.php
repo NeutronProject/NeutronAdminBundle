@@ -37,7 +37,7 @@ class MainTree implements TreeNodeInterface
      * @var string
      * 
      * @Gedmo\Translatable
-     * @ORM\Column(type="string", name="slug", length=255, nullable=false, unique=true)
+     * @ORM\Column(type="string", name="slug", length=255, nullable=true, unique=false)
      */
     protected $slug;
     

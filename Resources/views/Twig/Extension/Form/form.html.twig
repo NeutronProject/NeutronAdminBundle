@@ -1,6 +1,10 @@
 {% form_theme form with ['NeutronAdminBundle:Form:form_theme.html.twig'] %}
 
-<div id="messages"></div>
+<div id="messages">
+    {% for flashMessage in app.session.flashbag.get('neutron.form.success') %}
+        <div class="msg {{ flashMessage.type }}"><p> {{ flashMessage.body }}  </p><a class="close">×</a></div>
+    {% endfor %}	
+</div>
 
 <form action="{{ app.request.getRequestUri() }}" class="neutron-form form" {{ form_enctype(form) }} method="POST">
         {{ form_widget(form) }}
@@ -16,6 +20,12 @@
     </div>
 
 </form>
+
+<div id="message-form-success" style="display:none;">
+    <div class="msg success">
+        <p>__MSG__</p><a class="close">×</a>
+    </div>
+</div>
 
 <div id="message-form-invalid" style="display:none;">
     <div class="msg error">

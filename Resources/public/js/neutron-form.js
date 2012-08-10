@@ -21,6 +21,10 @@ jQuery(document).ready(function(){
 				if(data.success == true){
 					if(data.redirect_uri != undefined){
 						window.location = data.redirect_uri;
+					} else {
+						successMsg = jQuery('#message-form-success').html().replace('__MSG__', data.successMsg);
+						jQuery('#messages').append(successMsg);
+						$("html, body").animate({scrollTop:0}, "slow");
 					}
 				} else if (data.success == false){ 
 					buildErrors(data.errors);
@@ -57,8 +61,6 @@ function buildErrors(errors){
 		buildErrors(v);
 		
 	});
-	
-	
 }
 
 function buildErrorMsgs(key, errors)
