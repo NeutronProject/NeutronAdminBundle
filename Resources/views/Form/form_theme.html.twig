@@ -533,6 +533,90 @@
 {% endspaceless %}
 {% endblock neutron_image_upload_edit %}
 
+{% block neutron_widget_container_widget %}
+{% spaceless %}
+    <div class="widget-container" style="width:590px">
+	<legend>{% trans from "NeutronPluginBundle" %}form.widget_container.available_widgets{% endtrans %}</legend>
+        <div id="widget-list" >
+            {% if (widgets|length) > 0 %}
+                {% for widget in widgets %}
+                    <div class="widget-item">
+                        <div data-widget="{{ widget.getName() }}" class="ui-state-default widget">{{ widget.getLabel() }}</div>
+                        <small>{{ widget.getDescription() }}</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% trans from "NeutronPluginBundle" %}widgets.empty{% endtrans %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="widget-container" style="width:310px">
+        <legend>{% trans from "NeutronPluginBundle" %}containers{% endtrans %}</legend>
+        <div id="neutron-plugin-containers">
+            {% if (form|length) > 0 %}
+                {% for child in form %}
+                    <h3><a href="#">{{ child.getLabel() }}</a></h3>
+                    <div class="neutron-sortable" >
+                        {{ form_widget(child) }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% trans from "NeutronPluginBundle" %}panels.empty{% endtrans %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <div id="neutron-widget-container-dialog" title="{% trans from 'messages' %}widget_instance.dlg.title{% endtrans %}" style="display:none">
+        <div id="dlg-error-msg" class="ui-state-error ui-corner-all" style="display: none;"> 
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+                <strong>{% trans from 'messages' %}widget_instance.dlg.error_msg{% endtrans %}</strong>
+            </p>
+	</div>
+        <div>
+    	    <label>{% trans from 'messages' %}widget_instance.dlg.label{% endtrans %}</label>
+            <div>
+                <select id="neutron-widget-instance" class="uniform">
+
+                </select>
+                <button id="neutron-widget-container-dialog-save">
+                    {% trans from 'messages' %}widget_instance.dlg.btn{% endtrans %}
+                </button>
+            </div>
+         </div>  
+         
+         <p class="desc">{% trans from 'messages' %}widget_instance.dlg.desc{% endtrans %}</p>
+         
+         
+    </div>
+    
+    <span id="neutron-widget-container" style="display: none">{{ configs|json_encode }}</span>
+    
+{% endspaceless %}
+{% endblock neutron_widget_container_widget %}
+   
+{% block neutron_panel_collection_widget %}
+{% spaceless %}
+    {% for child in form %}
+        <h3><a href="#">{{ child.getLabel() }}</a></h3>
+        <div class="neutron-sortable" >
+            {{ form_widget(panel) }}
+        </div>
+    {% endfor %}
+    
+{% endspaceless %}
+{% endblock neutron_panel_collection_widget %}
+
+{% block neutron_widget_instance_collection_widget %}
+{% spaceless %}
+    {% for child in form %}
+        {{ form_widget(child) }}
+         <div data-widget="{{ child.widget }}" class="ui-state-default widget">{{ widget_provider.get(child.widget).getLabel() }}</div>
+    {% endfor %}
+    <span id="widget_instance_prototype" style="display:none">{{ form_widget(form.get('prototype')) | e }}</span>
+{% endspaceless %}
+{% endblock neutron_widget_instance_collection_widget %}
 
 {# Deprecated in Symfony 2.1, to be removed in 2.3 #}
 

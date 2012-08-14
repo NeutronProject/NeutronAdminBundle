@@ -63,7 +63,7 @@ class CategoryHandler implements FormHandlerInterface
                 $this->onSuccess();
 
                 $route = $this->pluginProvider
-                    ->get($this->form->get('general')->getData()->getType())->getRoute();
+                    ->get($this->form->get('general')->getData()->getType())->getBackendRoute();
                 
                 $this->request->getSession()
                     ->getFlashBag()->add('neutron.form.success', array(
