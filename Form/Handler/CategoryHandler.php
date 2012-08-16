@@ -5,7 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 use Doctrine\ORM\EntityManager;
 
-use Neutron\PluginBundle\Provider\PluginProviderInterface;
+use Neutron\LayoutBundle\Provider\PluginProviderInterface;
 
 use Neutron\TreeBundle\Model\TreeManagerFactoryInterface;
 
