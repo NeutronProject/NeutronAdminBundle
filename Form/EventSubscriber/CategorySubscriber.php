@@ -49,6 +49,7 @@ class CategorySubscriber implements EventSubscriberInterface
             $form->remove('enabled');
             $form->remove('displayed');
             $form->remove('slug');
+            $form->remove('linkTarget');
             
             $parentType = $data->getParent()->getType();
             

@@ -1,5 +1,5 @@
 <?php
-namespace Neutron\AdminBundle\Form\Type\Category;
+namespace Neutron\AdminBundle\Form\Type;
 
 use Neutron\LayoutBundle\Provider\PluginProviderInterface;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Form\AbstractType;
 
 use Symfony\Component\Form\FormInterface;
 
-class GeneralType extends AbstractType
+class CategoryType extends AbstractType
 {
     
     protected $subscriber;
@@ -105,7 +105,7 @@ class GeneralType extends AbstractType
     
     public function getName()
     {
-        return 'neutron_admin_form_category_general';
+        return 'neutron_admin_form_category';
     }
     
 }

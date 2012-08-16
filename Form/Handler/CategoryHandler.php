@@ -32,13 +32,13 @@ class CategoryHandler implements FormHandlerInterface
     protected $form;
     protected $formHelper;
     protected $treeManager;
-    protected $aclManager;
     protected $pluginProvider;
     protected $result;
 
 
-    public function __construct(EntityManager $em, Form $form, FormHelper $formHelper, Request $request, Router $router, Translator $translator,
-            AclManagerInterface $aclManager, PluginProviderInterface $pluginProvider, TreeManagerFactoryInterface $treeManager, $treeClass)
+    public function __construct(EntityManager $em, Form $form, FormHelper $formHelper, 
+            Request $request, Router $router, Translator $translator,
+            PluginProviderInterface $pluginProvider, TreeManagerFactoryInterface $treeManager, $treeClass)
     {
         $this->em = $em;
         $this->form = $form;
@@ -46,7 +46,6 @@ class CategoryHandler implements FormHandlerInterface
         $this->request = $request;
         $this->router = $router;
         $this->translator = $translator;
-        $this->aclManager = $aclManager;
         $this->pluginProvider =$pluginProvider;
         $this->treeManager = $treeManager->getManagerForClass($treeClass);
     }
@@ -59,11 +58,11 @@ class CategoryHandler implements FormHandlerInterface
             $this->form->bind($this->request);
             
             if ($this->form->isValid()) {
-                
-                $this->onSuccess();
+                $node = $this->form->getData();
+                $this->treeManager->persistAsLastChildOf($node, $node->getParent());
 
                 $route = $this->pluginProvider
-                    ->get($this->form->get('general')->getData()->getType())->getBackendRoute();
+                    ->get($this->form->getData()->getType())->getBackendRoute();
                 
                 $this->request->getSession()
                     ->getFlashBag()->add('neutron.form.success', array(
@@ -73,7 +72,7 @@ class CategoryHandler implements FormHandlerInterface
              
                 $this->result = array(
                     'success' => true,
-                    'redirect_uri' => $this->router->generate($route, array('id' => $this->form->get('general')->getData()->getId()))
+                    'redirect_uri' => $this->router->generate($route, array('id' => $this->form->getData()->getId()))
                 );
                 
                 return true;
@@ -93,21 +92,6 @@ class CategoryHandler implements FormHandlerInterface
     public function getResult()
     {
         return $this->result;
-    }
-    
-    protected function onSuccess()
-    {
-        $treeManager = $this->treeManager;
-        $aclManager = $this->aclManager;
-        
-        $node = $this->form->get('general')->getData();
-        $acl = $this->form->get('acl')->getData();
-        
-        $this->em->transactional(function(EntityManager $em) use ($treeManager, $aclManager, $node, $acl){
-            $treeManager->persistAsLastChildOf($node, $node->getParent());
-            $aclManager
-                ->setObjectPermissions(ObjectIdentity::fromDomainObject($node), $acl);
-        });
     }
    
 }

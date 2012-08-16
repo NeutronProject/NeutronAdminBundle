@@ -64,7 +64,7 @@ class CategoryController extends ContainerAware
         $form = $this->container->get('neutron_admin.form.category');
         $handler = $this->container->get('neutron_admin.form.handler.category');
         
-        $form->setData(array('general' => $node));
+        $form->setData($node);
         
         if (null !== $handler->process()){
             return new Response(json_encode($handler->getResult()));

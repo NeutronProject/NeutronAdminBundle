@@ -5,7 +5,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Symfony\Component\Form\AbstractType;
 
-
 class AclType extends AbstractType
 {
     
