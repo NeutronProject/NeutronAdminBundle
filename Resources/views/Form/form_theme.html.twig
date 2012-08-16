@@ -217,17 +217,22 @@
 
 {% block form_row %}
 {% spaceless %}
-    <div id="{{ form.vars['id'] }}-div" class="field">
-        {{ form_label(form, label|default(null)) }}
-        {#
-        If the child is a compound form, the errors are rendered inside
-        the container. See also block form_rows.
-        #}
-        {% if not compound %}
-            {{ form_errors(form) }}
-        {% endif %}
+    {% if form.vars['neutron_widget'] is defined %}
         {{ form_widget(form) }}
-    </div>
+    {% else %}
+        <div id="{{ form.vars['id'] }}-div" class="field">
+            {{ form_label(form, label|default(null)) }}
+            {#
+            If the child is a compound form, the errors are rendered inside
+            the container. See also block form_rows.
+            #}
+            {% if not compound %}
+                {{ form_errors(form) }}
+            {% endif %}
+            {{ form_widget(form) }}
+        </div>
+    {% endif %}
+
 {% endspaceless %}
 {% endblock form_row %}
 
@@ -533,90 +538,90 @@
 {% endspaceless %}
 {% endblock neutron_image_upload_edit %}
 
-{% block neutron_widget_container_widget %}
+{% block neutron_layout_widget %}
 {% spaceless %}
     <div class="widget-container" style="width:590px">
-	<legend>{% trans from "NeutronPluginBundle" %}form.widget_container.available_widgets{% endtrans %}</legend>
+	<legend>{% trans from "NeutronLayoutBundle" %}form.layout.available_widgets{% endtrans %}</legend>
         <div id="widget-list" >
             {% if (widgets|length) > 0 %}
                 {% for widget in widgets %}
                     <div class="widget-item">
                         <div data-widget="{{ widget.getName() }}" class="ui-state-default widget">{{ widget.getLabel() }}</div>
-                        <small>{{ widget.getDescription() }}</small>
+                        <p class="desc">{{ widget.getDescription() }}</p>
                     </div>
                 {% endfor %}
             {% else %}
-                {% trans from "NeutronPluginBundle" %}widgets.empty{% endtrans %}
+                {% trans from "NeutronLayoutBundle" %}widgets.empty{% endtrans %}
             {% endif %}
         </div>
     </div>
-    
     <div class="widget-container" style="width:310px">
-        <legend>{% trans from "NeutronPluginBundle" %}containers{% endtrans %}</legend>
+        <legend>{% trans from "NeutronLayoutBundle" %}layout.panels{% endtrans %}</legend>
         <div id="neutron-plugin-containers">
-            {% if (form|length) > 0 %}
-                {% for child in form %}
-                    <h3><a href="#">{{ child.getLabel() }}</a></h3>
-                    <div class="neutron-sortable" >
-                        {{ form_widget(child) }}
+           
+            {% if (form|length) > 0 %} 
+                {% for panel in form %}              
+                    <h3><a href="#">{{ panel.vars.label }}</a></h3>
+                    
+                    <div class="neutron-sortable" data-panel="{{ panel.vars.data.name }}" data-prototype="{{ form_row(panel.widgetInstances.vars.prototype)|e }}">
+                        {% for widgets in panel %}
+                            {% for widget in widgets %}
+                                <div data-widget="{{ widget.widget.vars.value }}" class="ui-state-default widget">
+                                    {{ neutron_layout_widget(widget.widget.vars.value).getLabel() }}
+                                    <a class="delete-btn" href="#" style="float:right"></a>
+                                    <a href="#" class="edit-btn" style="float:right"></a>
+                                    {{ form_widget(widget.identifier) }}
+                                    {{ form_widget(widget.category) }}
+                                    {{ form_widget(widget.widget) }}
+                                    {{ form_widget(widget.plugin) }}
+                                    {{ form_widget(widget.panel) }}
+                                    {{ form_widget(widget.position) }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                          
+                        <p {% if(panel.vars.data.widgetInstances|length)  > 0 %}style="display:none"{% endif %}
+                            class="desc">{{ panel.vars.data.description }}</p>
                     </div>
+
                 {% endfor %}
             {% else %}
-                {% trans from "NeutronPluginBundle" %}panels.empty{% endtrans %}
+                {% trans from "NeutronLayoutBundle" %}panels.empty{% endtrans %}
             {% endif %}
         </div>
     </div>
-    
-    <div id="neutron-widget-container-dialog" title="{% trans from 'messages' %}widget_instance.dlg.title{% endtrans %}" style="display:none">
+
+    <div id="neutron-layout-dialog" title="{% trans from 'messages' %}widget_instance.dlg.title{% endtrans %}" style="display:none">
         <div id="dlg-error-msg" class="ui-state-error ui-corner-all" style="display: none;"> 
             <p>
                 <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-                <strong>{% trans from 'messages' %}widget_instance.dlg.error_msg{% endtrans %}</strong>
+                <strong>{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.error_msg{% endtrans %}</strong>
             </p>
 	</div>
+	
         <div>
-    	    <label>{% trans from 'messages' %}widget_instance.dlg.label{% endtrans %}</label>
+            <label>{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.label{% endtrans %}</label>
             <div>
                 <select id="neutron-widget-instance" class="uniform">
 
                 </select>
-                <button id="neutron-widget-container-dialog-save">
-                    {% trans from 'messages' %}widget_instance.dlg.btn{% endtrans %}
+                <button id="neutron-layout-dialog-save">
+                    {% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.btn{% endtrans %}
                 </button>
             </div>
-         </div>  
-         
-         <p class="desc">{% trans from 'messages' %}widget_instance.dlg.desc{% endtrans %}</p>
-         
-         
+        </div>  
+        
+        <p class="desc">{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.desc{% endtrans %}</p>
     </div>
     
-    <span id="neutron-widget-container" style="display: none">{{ configs|json_encode }}</span>
-    
-{% endspaceless %}
-{% endblock neutron_widget_container_widget %}
-   
-{% block neutron_panel_collection_widget %}
-{% spaceless %}
-    {% for child in form %}
-        <h3><a href="#">{{ child.getLabel() }}</a></h3>
-        <div class="neutron-sortable" >
-            {{ form_widget(panel) }}
-        </div>
-    {% endfor %}
-    
-{% endspaceless %}
-{% endblock neutron_panel_collection_widget %}
+    <span id="neutron-layout" style="display: none">{{ configs|json_encode }}</span>
 
-{% block neutron_widget_instance_collection_widget %}
-{% spaceless %}
-    {% for child in form %}
-        {{ form_widget(child) }}
-         <div data-widget="{{ child.widget }}" class="ui-state-default widget">{{ widget_provider.get(child.widget).getLabel() }}</div>
-    {% endfor %}
-    <span id="widget_instance_prototype" style="display:none">{{ form_widget(form.get('prototype')) | e }}</span>
 {% endspaceless %}
-{% endblock neutron_widget_instance_collection_widget %}
+{% endblock neutron_layout_widget %}
+
+
+
+
 
 {# Deprecated in Symfony 2.1, to be removed in 2.3 #}
 

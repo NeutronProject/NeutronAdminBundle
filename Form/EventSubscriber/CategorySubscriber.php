@@ -9,7 +9,7 @@
  */
 namespace Neutron\AdminBundle\Form\EventSubscriber;
 
-use Neutron\PluginBundle\Provider\PluginProviderInterface;
+use Neutron\LayoutBundle\Provider\PluginProviderInterface;
 
 use Neutron\TreeBundle\Model\TreeNodeInterface;
 

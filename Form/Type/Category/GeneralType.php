@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\AdminBundle\Form\Type\Category;
 
-use Neutron\PluginBundle\Provider\PluginProviderInterface;
+use Neutron\LayoutBundle\Provider\PluginProviderInterface;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

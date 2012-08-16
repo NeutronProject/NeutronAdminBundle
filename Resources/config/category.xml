@@ -18,7 +18,7 @@
         <service id="neutron_admin.form.type.category.general" class="Neutron\AdminBundle\Form\Type\Category\GeneralType">
             <argument type="service" id="neutron_admin.form.event_subscriber.category"/>
             <argument>%neutron_admin.category.tree_data_class%</argument>
-            <argument type="service" id="neutron_plugin.provider" />
+            <argument type="service" id="neutron_layout.plugin_provider" />
             <tag name="form.type" alias="neutron_admin_form_category_general" />
         </service>
         
@@ -34,7 +34,7 @@
             <argument type="service" id="router" />
             <argument type="service" id="translator" />
             <argument type="service" id="neutron_admin.acl.manager" />
-            <argument type="service" id="neutron_plugin.provider" />
+            <argument type="service" id="neutron_layout.plugin_provider" />
             <argument type="service" id="neutron_tree.manager.factory" />
 			<argument>%neutron_admin.category.tree_data_class%</argument>
         </service>

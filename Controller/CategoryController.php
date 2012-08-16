@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\AdminBundle\Controller;
 
-use Neutron\PluginBundle\Provider\PluginProvider;
+use Neutron\LayoutBundle\Provider\PluginProvider;
 
 use Neutron\Bundle\DataGridBundle\DataGrid\Provider\ContainerAwareProvider;
 
@@ -89,7 +89,7 @@ class CategoryController extends ContainerAware
             throw new NotFoundHttpException();
         }
         
-        $pluginProvider = $this->container->get('neutron_plugin.provider');
+        $pluginProvider = $this->container->get('neutron_layout.plugin_provider');
         $pluginRoute = $pluginProvider->get($category->getType())->getBackendRoute();
         $url = $this->container->get('router')->generate($pluginRoute, array('id' => $category->getId()));
         return new RedirectResponse($url);

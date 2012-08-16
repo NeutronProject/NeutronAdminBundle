@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\AdminBundle\Tree;
 
-use Neutron\PluginBundle\Provider\PluginProviderInterface;
+use Neutron\LayoutBundle\Provider\PluginProviderInterface;
 
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
