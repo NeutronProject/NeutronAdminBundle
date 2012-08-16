@@ -62,7 +62,7 @@ class CategorySubscriber implements EventSubscriberInterface
             
             if ($opt['children_strategy'] == 'self'){
                 $form->remove('type');
-                $data->setType($this->getParentNode()->getType());
+                $data->setType($parentType);
             } elseif ($opt['children_strategy'] == 'none'){
                 throw new \RuntimeException('Node can NOT be created!');
             }
