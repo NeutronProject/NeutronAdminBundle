@@ -22,7 +22,7 @@ class SettingsManager implements SettingsManagerInterface
         $this->cache = $em->getConfiguration()->getResultCacheImpl();
     }
     
-    public function createOption($name, $value, $group = 'default')
+    public function createOption($name, $value, $group = self::GROUP_DEFAULT)
     {
         $class = self::SETTINGS;
         $entity = new $class($name, $value, $group);
