@@ -30,45 +30,19 @@ class Main extends ContainerAware
         
         $category = $menu->addChild('category', array(
             'label' => 'menu.category',
-            'uri' => 'javascript;',
-            'attributes' => array(
-                'class' => 'dropdown',
-            ),
-            'childrenAttributes' => array(
-                'class' => 'menu',
-            ),
-            'extras' => array(
-                'safe_label' => true,
-                'breadcrumbs' => false,
-                'translation_domain' => 'NeutronAdminBundle'
-            ),
-        ));
-        
-        $category->addChild('category_management', array(
-            'label' => 'menu.category_management',
             'route' => 'neutron_admin.category.management',
             'extras' => array(
+                'safe_label' => true,
                 'breadcrumbs' => true,
                 'translation_domain' => 'NeutronAdminBundle'
             ),
         ));
+        
         
         $category->addChild('category_create', array(
             'label' => 'menu.category_create',
             'route' => 'neutron_admin.category.create',
             'routeParameters' => array('parentId' => $this->container->get('request')->get('parentId', 0)),
-            'display' => false,
-            'extras' => array(
-                'breadcrumbs' => true,
-                'allowed_roles' => array('None'),
-                'translation_domain' => 'NeutronAdminBundle'
-            ),
-        ));
-        
-        $category->addChild('category_update', array(
-            'label' => 'menu.category_update',
-            'route' => 'neutron_admin.category.update',
-            'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
             'display' => false,
             'extras' => array(
                 'breadcrumbs' => true,
@@ -88,7 +62,17 @@ class Main extends ContainerAware
                 'translation_domain' => 'NeutronAdminBundle'
             ),
         ));
-
+        
+        $settings = $menu->addChild('settings', array(
+            'route' => 'neutron_admin.settings',
+            'label' => 'menu.settings',
+            'extras' => array(
+               'breadcrumbs' => true,
+               'safe_label' => true,
+               'translation_domain' => 'NeutronAdminBundle'
+            )
+        ));
+        
         $userManagement = $menu->addChild('user_management', array(
             'uri' => 'javascript:;',
             'label' => 'menu.user_management',

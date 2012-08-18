@@ -28,6 +28,8 @@ class Configuration implements ConfigurationInterface
         $this->addLanguageSection($rootNode);
         
         $this->addCategorySection($rootNode);
+        
+        $this->addSettingsSection($rootNode);
 
         return $treeBuilder;
     }
@@ -87,4 +89,27 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
     }
+    
+    private function addSettingsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('settings')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue('neutron_settings')->end()
+                                ->scalarNode('handler')->defaultValue('neutron_admin.form.handler.settings.default')->end()
+                                ->scalarNode('name')->defaultValue('settings')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+    
 }

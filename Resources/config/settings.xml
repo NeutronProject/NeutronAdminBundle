@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="neutron_admin.settings_manager.class">Neutron\AdminBundle\Doctrine\ORM\SettingsManager</parameter>
+        <parameter key="neutron_admin.controller.settings.class">Neutron\AdminBundle\Controller\SettingsController</parameter>
+        <parameter key="neutron_admin.form.type.settings.class">Neutron\AdminBundle\Form\Type\SettingsType</parameter>
+        <parameter key="neutron_admin.form.type.settings.general.class">Neutron\AdminBundle\Form\Type\Settings\GeneralType</parameter>
+        <parameter key="neutron_admin.form.type.settings.search_engines.class">Neutron\AdminBundle\Form\Type\Settings\SearchEnginesType</parameter>
+        <parameter key="neutron_admin.form.type.settings.statistic.class">Neutron\AdminBundle\Form\Type\Settings\StatisticType</parameter>
+        <parameter key="neutron_admin.form.handler.settings.default.class">Neutron\AdminBundle\Form\Handler\SettingsHandler</parameter>
+    </parameters>
+    
+    <services>
+        <service id="neutron_admin.settings_manager" class="%neutron_admin.settings_manager.class%">
+        	<argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+		<service id="neutron_admin.controller.settings" class="%neutron_admin.controller.settings.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="neutron_admin.settings.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%neutron_admin.settings.form.name%</argument>
+            <argument>%neutron_admin.settings.form.type%</argument>
+        </service>
+        
+        <service id="neutron_admin.form.type.settings" class="%neutron_admin.form.type.settings.class%" >
+            <tag name="form.type" alias="neutron_settings" />
+        </service>
+        
+        <service id="neutron_admin.form.type.settings.general" class="%neutron_admin.form.type.settings.general.class%" >
+            <tag name="form.type" alias="neutron_settings_general" />
+        </service>
+        
+        <service id="neutron_admin.form.type.settings.search_engines" class="%neutron_admin.form.type.settings.search_engines.class%" >
+            <tag name="form.type" alias="neutron_settings_search_engines" />
+        </service>
+        
+        <service id="neutron_admin.form.type.settings.statistic" class="%neutron_admin.form.type.settings.statistic.class%" >
+            <tag name="form.type" alias="neutron_settings_statistic" />
+        </service>
+        
+        <service id="neutron_admin.form.handler.settings.default" 
+            class="%neutron_admin.form.handler.settings.default.class%" 
+            scope="request" 
+            public="false">
+			
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="neutron_admin.settings.form" />
+            <argument type="service" id="neutron_component.form.helper.form_helper" />
+            <argument type="service" id="request" />
+            <argument type="service" id="router" />
+            <argument type="service" id="translator" />
+            <argument type="service" id="neutron_seo.manager" />
+            <argument type="service" id="neutron_admin.settings_manager" />
+        </service>
+        
+    </services>
+
+</container>

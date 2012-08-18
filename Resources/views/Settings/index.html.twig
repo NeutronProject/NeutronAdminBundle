@@ -1,0 +1,27 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+
+{% block headTitle %} {% trans from "NeutronAdminBundle" %}settings.title{% endtrans %} {% endblock %}
+
+{% block headDesc %}
+    <h1 class="icon dashboard">
+        {% trans from "NeutronUserBundle" %}settings.header{% endtrans %} <small>some description</small>
+    </h1>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header class="divider">
+		 	    <h2>{% trans from "NeutronAdminBundle" %}settings.subheader{% endtrans %}</h2>
+		 	</header>
+            {{ neutron_form_tabs(
+                form, 
+                {'submit_label': 'settings.update', 'translation_domain': 'NeutronAdminBundle'}
+                
+            ) }}
+		</article>
+
+	</div>
+</div>
+{% endblock %}

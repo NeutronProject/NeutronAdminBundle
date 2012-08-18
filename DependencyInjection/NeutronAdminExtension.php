@@ -26,7 +26,7 @@ class NeutronAdminExtension extends Extension
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         
-        foreach (array('services', 'acl') as $basename) {
+        foreach (array('services', 'acl', 'settings') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
         }
         
@@ -40,9 +40,9 @@ class NeutronAdminExtension extends Extension
         
         
         
-        if (!empty($config['category'])) {
-            $this->loadCategory($config['category'], $container, $loader);
-        }
+        $this->loadCategory($config['category'], $container, $loader);
+
+        $this->loadSettings($config['settings'], $container, $loader);
         
     }
     
@@ -59,9 +59,19 @@ class NeutronAdminExtension extends Extension
                 'tree_data_class' => 'neutron_admin.category.tree_data_class',
                 'tree_name' => 'neutron_admin.category.tree_name'       
             )
-        ));
+        )); 
+    }
+    
+    private function loadSettings(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    {
+        $loader->load('settings.xml');
+    
+        $container->setAlias('neutron_admin.form.handler.settings', $config['form']['handler']);
         
         
+        $this->remapParametersNamespaces($config, $container, array(
+            'form' => 'neutron_admin.settings.form.%s',            
+        )); 
     }
     
     protected function remapParameters(array $config, ContainerBuilder $container, array $map)

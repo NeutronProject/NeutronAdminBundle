@@ -620,6 +620,21 @@
 {% endblock neutron_layout_widget %}
 
 
+{% block neutron_input_limiter_row %}
+{% spaceless %}
+<div class="field">
+    {{ block('field_label') }}
+        <div class="controls">
+            {{ form_widget(form) }}
+        </div>
+     
+    <span class="neutron-input-limiter" style="display:none">
+        {{ configs|merge({'id': id})|json_encode|raw }}
+    </span>
+        
+</div>
+{% endspaceless %}
+{% endblock neutron_input_limiter_row %}
 
 
 
