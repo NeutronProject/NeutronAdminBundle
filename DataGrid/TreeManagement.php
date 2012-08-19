@@ -120,9 +120,9 @@ class TreeManagement
             ->enableViewRecords(true)
             ->enableSearchButton(true)
             ->enableEditButton(true)
-            ->setEditBtnUri($this->router->generate('neutron_admin.category.update', array('nodeId' => '{{ rowId }}'), true))
+            ->setEditBtnUri($this->router->generate('neutron_admin.category.update', array('nodeId' => '{id}'), true))
             ->enableDeleteButton(true)
-            ->setDeleteBtnUri($this->router->generate('neutron_admin.category.delete', array('nodeId' => '{{ rowId }}'), true))
+            ->setDeleteBtnUri($this->router->generate('neutron_admin.category.delete', array('nodeId' => '{id}'), true))
             ->setQueryHints(array(
                 Query::HINT_CUSTOM_OUTPUT_WALKER => 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker',
             ))

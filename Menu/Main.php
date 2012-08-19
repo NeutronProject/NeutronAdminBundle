@@ -63,6 +63,38 @@ class Main extends ContainerAware
             ),
         ));
         
+        $plugins = $menu->addChild('plugins', array(
+            'label' => 'menu.plugins',
+            'uri' => 'javascript:;',
+            'attributes' => array(
+                'class' => 'dropdown',
+            ),
+            'childrenAttributes' => array(
+                'class' => 'menu',
+            ),
+            'extras' => array(
+                'safe_label' => true,
+                'breadcrumbs' => true,
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
+        
+        $plugins = $menu->addChild('widgets', array(
+            'label' => 'menu.widgets',
+            'uri' => 'javascript;',
+            'attributes' => array(
+                'class' => 'dropdown',
+            ),
+            'childrenAttributes' => array(
+                'class' => 'menu',
+            ),
+            'extras' => array(
+                'safe_label' => true,
+                'breadcrumbs' => true,
+                'translation_domain' => 'NeutronAdminBundle'
+            ),
+        ));
+        
         $settings = $menu->addChild('settings', array(
             'route' => 'neutron_admin.settings',
             'label' => 'menu.settings',

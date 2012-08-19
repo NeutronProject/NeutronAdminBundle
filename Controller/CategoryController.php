@@ -1,6 +1,10 @@
 <?php
 namespace Neutron\AdminBundle\Controller;
 
+use Neutron\TreeBundle\Model\TreeNodeInterface;
+
+use Neutron\AdminBundle\Acl\AclManagerInterface;
+
 use Neutron\LayoutBundle\Provider\PluginProvider;
 
 use Neutron\Bundle\DataGridBundle\DataGrid\Provider\ContainerAwareProvider;
@@ -99,54 +103,72 @@ class CategoryController extends ContainerAware
     {
         $tree = $this->container->get('neutron.tree')
             ->get($this->container->getParameter('neutron_admin.category.tree_name'));
-        $manager = $tree->getManager();
         
-        $node = $manager->findNodeBy(array('id' => (int) $nodeId));
+        $categoryManager = $tree->getManager();
+        $aclManager = $this->container->get('neutron_admin.acl.manager');
+        
+        $node = $categoryManager->findNodeBy(array('id' => $nodeId));
         
         if (!$node){
             throw new NotFoundHttpException();
         }
         
+        $pluginProvider = $this->container->get('neutron_layout.plugin_provider');
+        $pluginDeleteRoute = $pluginProvider->get($node->getType())->getDeleteRoute();
+        
+        if ($pluginDeleteRoute){
+            $redirectUrl = $this->container->get('router')->generate($pluginDeleteRoute, array('id' => $node->getId()));
+            return new RedirectResponse($redirectUrl);
+        }
+        
         $request = $this->container->get('request');
         
-
+        $operation = $request->get('operation', false);
+        
         if ($request->getMethod() == 'POST'){
-            
-            $operation = $request->get('operation', false);
-            
-            $validOperations = array('delete', 'remove');
-            
-            if (!in_array($operation, $validOperations)){
-                throw new \InvalidArgumentException(sprintf('Operation "%s" is not valid', $operation));
-            }
-            
-            $this->container->get('neutron_admin.acl.manager')
-                ->deleteObjectPermissions(ObjectIdentity::fromDomainObject($node));
-            
-            if ($operation == 'delete'){
-                $manager->deleteNode($node);
-            } elseif($operation == 'remove'){
-                $manager->removeNodeFromTree($node);
-            } 
-            
+            $this->doDelete($categoryManager, $aclManager, $node, $operation);
             
             $request->getSession()
                 ->getFlashBag()->add('neutron_admin_tree_success', 'tree.flash.deleted');
-            
-            $url = $this->container->get('router')->generate('neutron_admin.category.management');
-            
-            return new RedirectResponse($url);
+        
+            $redirectUrl = $this->container->get('router')->generate('neutron_admin.category.management');
+        
+            return new RedirectResponse($redirectUrl);
         }
         
         $template = $this->container->get('templating')
             ->render('NeutronAdminBundle:Category:delete.html.twig', array(
-                'node' => $node
+                    'node' => $node
             ));
         
         return new Response($template);
     }
+   
     
-    private function getNode($parentId)
+    protected function doDelete(TreeManagerInterface $categoryManager, 
+            AclManagerInterface $aclManager, TreeNodeInterface $node, $operation)
+    {
+        
+        $validOperations = array('delete', 'remove');
+        
+        if (!in_array($operation, $validOperations)){
+            throw new \InvalidArgumentException(sprintf('Operation "%s" is not valid', $operation));
+        }
+        
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        
+        $em->transactional(function(EntityManager $em) use ($categoryManager, $aclManager, $node, $operation){
+            $aclManager->deleteObjectPermissions(ObjectIdentity::fromDomainObject($node));
+        
+            if ($operation == 'delete'){
+                $categoryManager->deleteNode($node);
+            } elseif($operation == 'remove'){
+                $categoryManager->removeNodeFromTree($node);
+            }
+        });
+    }
+    
+    protected function getNode($parentId)
     {
         $manager = $this->container->get('neutron_tree.manager.factory')
             ->getManagerForClass($this->container->getParameter('neutron_admin.category.tree_data_class'));
@@ -162,5 +184,7 @@ class CategoryController extends ContainerAware
         
         return $node;
     }
+    
+ 
 
 }
