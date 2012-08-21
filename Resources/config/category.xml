@@ -42,6 +42,8 @@
         	<argument type="service" id="doctrine.orm.entity_manager" />
         	<argument type="service" id="translator" />
         	<argument type="service" id="router" />
+        	<argument type="service" id="session" />
+        	<argument>%locale%</argument>
         </service>
         
         <service id="neutron_admin.datagrid.factory.tree_management" 
@@ -61,6 +63,11 @@
         <service id="neutron_admin.event_subscriber.doctrine.main_tree" class="Neutron\AdminBundle\EventSubscriber\Doctrine\MainTreeSubscriber">
             <argument type="service" id="neutron_component.util.filter.slug" />
             <tag name="doctrine.event_subscriber" connection="default" />
+        </service>
+        
+        <service id="neutron_admin.category.manager.default" class="Neutron\AdminBundle\Doctrine\ORM\CategoryManager">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument>%neutron_admin.category.tree_data_class%</argument>
         </service>
 
     </services>

@@ -97,6 +97,15 @@ class ApplicationLanguageExtension extends \Twig_Extension
                 'currentFrontendLanguage' => $currentFrontendLanguage,
             ));
     }
+    
+    public function getFrontendLanguages()
+    {
+        if (count($this->frontendLanguages) < 2){
+            return array();
+        }
+        
+        return $this->container->getParameter('neutron_admin.languages.frontend');
+    }
 
     /**
      * (non-PHPdoc)
@@ -113,6 +122,9 @@ class ApplicationLanguageExtension extends \Twig_Extension
                 
             'neutron_admin_language_get' =>
         		new \Twig_Function_Method($this, 'getLanguage'),
+                
+            'neutron_language_get' =>
+        		new \Twig_Function_Method($this, 'getFrontendLanguages'),
        
         );
     }

@@ -79,7 +79,6 @@ class AclManager implements AclManagerInterface
         );
     
         $builder = new MaskBuilder();
-        $builder->add(MaskBuilder::MASK_MASTER);
     
         foreach ($permissions as $permission){
             if (!array_key_exists($permission, $supportedPermissions)){

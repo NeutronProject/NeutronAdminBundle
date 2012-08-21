@@ -15,25 +15,7 @@
 
         {% endblock %}
         
-        {% block javascripts %}
 
-            {{ neutron_prepend_javascript('bundles/neutronadmin/js/neutron-form.js') }}
-            {{ neutron_prepend_javascript('files/scripts.js') }}
-            {{ neutron_prepend_javascript('jquery/plugins/blockui/jquery.blockUI.js') }}
-            {{ neutron_prepend_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
-            {{ neutron_prepend_javascript('jquery/plugins/jgrowl/jquery.jgrowl.js') }}
-            {{ neutron_prepend_javascript('jquery/i18n/jquery-ui-i18n.js') }}
-            {{ neutron_prepend_javascript('jquery/js/jquery-ui.js') }}
-            {{ neutron_prepend_javascript('jquery/js/jquery.js') }}
-            
-            {{ neutron_javascript_render() }}
-    
-            <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-            <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-        
-            <!--[if lt IE 9]><script src="{{ site_url }}files/assets/html5shiv.js"></script><![endif]-->
-
-        {% endblock %}
         
     
     </head>
@@ -95,6 +77,23 @@
         <footer>
             <p>&copy; 2012 by <a href="http:neutronlabs.bg">NeutronLabs</a></p>
         </footer>
+        {% endblock %}
+        
+        {% block javascripts %}
+
+            {{ neutron_prepend_javascript('bundles/neutronadmin/js/neutron-form.js') }}
+            {{ neutron_prepend_javascript('files/scripts.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/blockui/jquery.blockUI.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/uniform/jquery.uniform.min.js') }}
+            {{ neutron_prepend_javascript('jquery/plugins/jgrowl/jquery.jgrowl.js') }}
+            {{ neutron_prepend_javascript('jquery/i18n/jquery-ui-i18n.js') }}
+            {{ neutron_prepend_javascript('jquery/js/jquery-ui.js') }}
+            {{ neutron_prepend_javascript('jquery/js/jquery.js') }}
+            
+            {{ neutron_javascript_render() }}
+    
+            <!--[if lt IE 9]><script src="{{ site_url }}files/assets/html5shiv.js"></script><![endif]-->
+
         {% endblock %}
         
     </body>

@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\AdminBundle\DataGrid;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 use Doctrine\ORM\Query;
 
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -23,14 +25,20 @@ class TreeManagement
     protected $translator;
     
     protected $router;
+    
+    protected $session;
+    
+    protected $defaultLocale;
 
     public function __construct (FactoryInterface $factory, EntityManager $em, 
-            Translator $translator, Router $router)
+            Translator $translator, Router $router, SessionInterface $session, $defaultLocale)
     {
         $this->factory = $factory;
         $this->em = $em;
         $this->translator = $translator;
         $this->router = $router;
+        $this->session = $session;
+        $this->defaultLocale = $defaultLocale;
     }
 
     public function build ()
@@ -124,7 +132,10 @@ class TreeManagement
             ->enableDeleteButton(true)
             ->setDeleteBtnUri($this->router->generate('neutron_admin.category.delete', array('nodeId' => '{id}'), true))
             ->setQueryHints(array(
-                Query::HINT_CUSTOM_OUTPUT_WALKER => 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker',
+                Query::HINT_CUSTOM_OUTPUT_WALKER 
+                    => 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker',
+                \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE
+                    => $this->session->get('frontend_language', $this->defaultLocale),
             ))
             ->setTreeName('main')
         ;

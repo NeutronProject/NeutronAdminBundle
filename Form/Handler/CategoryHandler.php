@@ -62,7 +62,7 @@ class CategoryHandler implements FormHandlerInterface
                 $this->treeManager->persistAsLastChildOf($node, $node->getParent());
 
                 $route = $this->pluginProvider
-                    ->get($this->form->getData()->getType())->getBackendRoute();
+                    ->get($this->form->getData()->getType())->getUpdateRoute();
                 
                 $this->request->getSession()
                     ->getFlashBag()->add('neutron.form.success', array(

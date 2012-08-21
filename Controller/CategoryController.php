@@ -94,8 +94,8 @@ class CategoryController extends ContainerAware
         }
         
         $pluginProvider = $this->container->get('neutron_layout.plugin_provider');
-        $pluginRoute = $pluginProvider->get($category->getType())->getBackendRoute();
-        $url = $this->container->get('router')->generate($pluginRoute, array('id' => $category->getId()));
+        $updateRoute = $pluginProvider->get($category->getType())->getUpdateRoute();
+        $url = $this->container->get('router')->generate($updateRoute, array('id' => $category->getId()));
         return new RedirectResponse($url);
     }
     

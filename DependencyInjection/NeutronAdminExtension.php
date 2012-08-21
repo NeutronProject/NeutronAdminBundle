@@ -33,6 +33,7 @@ class NeutronAdminExtension extends Extension
 
         $container->setParameter('neutron_admin.languages.backend', $config['languages']['backend']);
         $container->setParameter('neutron_admin.languages.frontend', $config['languages']['frontend']);
+
             
         $container->getDefinition('neutron_admin.event_subscriber.locale_subscriber')
             ->setPublic(true)
@@ -50,6 +51,7 @@ class NeutronAdminExtension extends Extension
     {
         $loader->load('category.xml');
     
+        $container->setAlias('neutron_admin.category.manager', $config['manager']);
         $container->setAlias('neutron_admin.form.handler.category', $config['form']['handler']);
         
         

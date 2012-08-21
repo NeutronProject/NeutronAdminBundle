@@ -48,6 +48,10 @@ class LocaleSubscriber implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {  
+        if (!$this->isAdmin($event->getRequest())){
+            return;
+        }
+        
         $preferredBackendLanguage = $event->getRequest()->getPreferredLanguage($this->backendLanguages);
 
         $session = $event->getRequest()->getSession();
@@ -56,6 +60,17 @@ class LocaleSubscriber implements EventSubscriberInterface
         $this->translatableListener->setTranslatableLocale(
             $session->get('frontend_language', $this->defaultLocale)
         );
+    }
+    
+    protected function isAdmin(Request $request)
+    {
+        $requestedUri = $request->getRequestUri();
+         
+        if (preg_match('/^\/admin/', $requestedUri)){
+            return true;
+        }
+        
+        return false;
     }
 
     static public function getSubscribedEvents()

@@ -74,6 +74,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->canBeUnset()
                     ->children()
+                        ->scalarNode('manager')->defaultValue('neutron_admin.category.manager.default')->end()
                         ->scalarNode('tree_data_class')->defaultValue('Neutron\AdminBundle\Entity\MainTree')->end()
                         ->scalarNode('tree_name')->defaultValue('main')->end()
                         ->arrayNode('form')
