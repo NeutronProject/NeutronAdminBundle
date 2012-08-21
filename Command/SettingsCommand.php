@@ -62,7 +62,7 @@ class SettingsCommand extends ContainerAwareCommand
            ),     
             'general' => array(
                 'author'     => 'Nikolay Georgiev',    
-                'copyrights' => 'NeutronLabs',
+                'copyright' => 'NeutronLabs',
                 'publisher' => 'NeutronLabs',
                 'robots'    => 'index, follow, all',
             ),

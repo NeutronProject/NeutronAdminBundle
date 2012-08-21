@@ -34,7 +34,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $options = $this->getOptions($useCache);
         if (!isset($options[$name])){
-            throw new \InvalidArgumentException(sprintf('Option "%s" does not exist.'));
+            throw new \InvalidArgumentException(sprintf('Option "%s" does not exist.', $name));
         }
         
         return $options[$name];
@@ -42,7 +42,15 @@ class SettingsManager implements SettingsManagerInterface
     
     public function getOptions($useCache = false)
     {
-        return $this->repository->getOptions($useCache);
+        $result =  $this->repository->getOptions($useCache);
+        $options = array();
+        
+        foreach ($result as $option){
+            $options[$option['optionName']] = $option['optionValue'];
+        }
+        
+        return $options;
+        
     }
     
 

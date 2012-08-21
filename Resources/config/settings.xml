@@ -12,6 +12,7 @@
         <parameter key="neutron_admin.form.type.settings.search_engines.class">Neutron\AdminBundle\Form\Type\Settings\SearchEnginesType</parameter>
         <parameter key="neutron_admin.form.type.settings.statistic.class">Neutron\AdminBundle\Form\Type\Settings\StatisticType</parameter>
         <parameter key="neutron_admin.form.handler.settings.default.class">Neutron\AdminBundle\Form\Handler\SettingsHandler</parameter>
+        <parameter key="neutron_admin.twig.extension.settings.class">Neutron\AdminBundle\Twig\Extension\SettingsExtension</parameter>
     </parameters>
     
     <services>
@@ -60,6 +61,12 @@
             <argument type="service" id="neutron_seo.manager" />
             <argument type="service" id="neutron_admin.settings_manager" />
         </service>
+        
+        <service id="neutron_admin.twig.extension.settings" class="%neutron_admin.twig.extension.settings.class%">
+    		<argument type="service" id="neutron_admin.settings_manager" />
+    		<tag name="twig.extension" />
+		</service>
+    
         
     </services>
 
