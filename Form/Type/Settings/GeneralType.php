@@ -25,7 +25,7 @@ class GeneralType extends AbstractType
                 ),
                 'translation_domain' => 'NeutronAdminBundle'
             ))
-            ->add('copyrights', 'text', array(
+            ->add('copyright', 'text', array(
                 'label' => 'form.copyright',
                 'constraints' => array(
                     new NotBlank(array('message' => 'form.copyright.not_blank')),

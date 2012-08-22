@@ -38,6 +38,11 @@ class CategoryType extends AbstractType
                 'translation_domain' => 'NeutronAdminBundle'
             ))
             
+            ->add('name', 'text', array(
+                'label' => 'form.name',
+                'translation_domain' => 'NeutronAdminBundle'
+            ))
+            
             ->add('slug', 'text', array(
                 'label' => 'form.slug',
                 'translation_domain' => 'NeutronAdminBundle'

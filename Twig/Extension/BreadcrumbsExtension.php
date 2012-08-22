@@ -49,7 +49,7 @@ class BreadcrumbsExtension extends \Twig_Extension
     public function render(ItemInterface $menu)
     {   
         $matcher = $this->container->get('knp_menu.matcher');
-        $voter = $this->container->get('neutron_admin.menu.voter');
+        $voter = $this->container->get('neutron_component.menu.voter');
         $voter->setUri($this->container->get('request')->getRequestUri());
         $matcher->addVoter($voter);
         

@@ -17,14 +17,6 @@
 {{ block('list') -}}
 {% endblock %}
 
-{% block list %}
-{% if item.hasChildren and options.depth is not sameas(0) and item.displayChildren %}
-    <ul{{ _self.attributes(listAttributes) }}>
-        {{ block('children') }}
-    </ul>
-{% endif %}
-{% endblock %}
-
 {% block children %}
 {# save current variables #}
 {% set currentOptions = options %}

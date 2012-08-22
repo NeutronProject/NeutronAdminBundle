@@ -65,8 +65,14 @@
             <tag name="doctrine.event_subscriber" connection="default" />
         </service>
         
-        <service id="neutron_admin.category.manager.default" class="Neutron\AdminBundle\Doctrine\ORM\CategoryManager">
+        <service id="neutron_admin.category.manager.default" class="Neutron\AdminBundle\Doctrine\ORM\CategoryManager" 
+        	scope="request">
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="neutron_tree.manager.factory" />
+            <argument type="service" id="neutron_layout.plugin_provider" />
+            <argument type="service" id="router" />
+            <argument type="service" id="request" />
+            <argument type="service" id="security.context" />
             <argument>%neutron_admin.category.tree_data_class%</argument>
         </service>
 

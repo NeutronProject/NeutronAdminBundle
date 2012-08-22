@@ -79,7 +79,7 @@ class AclManager implements AclManagerInterface
         );
     
         $builder = new MaskBuilder();
-    
+
         foreach ($permissions as $permission){
             if (!array_key_exists($permission, $supportedPermissions)){
                 throw new \InvalidArgumentException(sprintf('Mask "%s" is not supported!', $permission));

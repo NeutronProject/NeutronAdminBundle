@@ -26,6 +26,13 @@ class MainTree implements TreeNodeInterface
     protected $id;
     
     /**
+     * @var string 
+     *
+     * @ORM\Column(type="string", name="name", length=20, nullable=false, unique=true)
+     */
+    protected $name;
+    
+    /**
      * @var string
      * 
      * @Gedmo\Translatable
@@ -116,6 +123,16 @@ class MainTree implements TreeNodeInterface
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    
+    public function getName()
+    {
+        return $this->name;
     }
     
     public function setTitle($title)

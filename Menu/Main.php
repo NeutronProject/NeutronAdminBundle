@@ -14,9 +14,11 @@ use Neutron\AdminBundle\Event\ConfigureMenuEvent;
 class Main extends ContainerAware
 {
 
+    const IDENTIFIER = 'Administration';
+    
     public function menu(FactoryInterface $factory, array $options)
     {
-        $this->container->get('neutron_admin.menu.voter')
+        $this->container->get('neutron_component.menu.voter')
             ->setUri($this->container->get('request')->getRequestUri());
         
         $menu = $factory->createItem('Localhost');
@@ -223,7 +225,7 @@ class Main extends ContainerAware
         ));
 
         $this->container->get('event_dispatcher')
-            ->dispatch(AdminEvents::onMenuConfigure, new ConfigureMenuEvent($factory, $menu));
+            ->dispatch(AdminEvents::onMenuConfigure, new ConfigureMenuEvent(self::IDENTIFIER, $factory, $menu));
 
         return $menu;
     }
