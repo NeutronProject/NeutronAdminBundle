@@ -67,7 +67,10 @@
                 }}
 
             </div>
-			{{ neutron_admin_breadcrumbs_render(knp_menu_get('NeutronAdminBundle:Main:menu')) }}
+            
+			{{ neutron_admin_breadcrumbs_render(knp_menu_get('NeutronAdminBundle:Main:menu'), 
+			    {'template': 'NeutronAdminBundle:Menu:breadcrumbs.html.twig'}) 
+           }}
 
 
             <div id="container">{% block body %}{% endblock %}</div>

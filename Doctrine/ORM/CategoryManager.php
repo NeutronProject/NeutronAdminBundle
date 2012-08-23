@@ -76,9 +76,7 @@ class CategoryManager implements CategoryManagerInterface
             $stack = array();
             foreach ($nodes as $child) {
 
-                $translationDomain = ($child['type'] == 'root') ? 
-                    'NeutronAdminBundle' : $this->pluginProvider->get($child['type'])->getTranslationDomain(); 
-
+                
                 $item = array(
                     'name' => $child['name'],
                     'label' => $child['title'],
@@ -86,9 +84,6 @@ class CategoryManager implements CategoryManagerInterface
                     'routeParameters' => array('slug' => $child['slug']),
                     'display' => $child['displayed'],                    
                     'lvl' => $child['lvl'],
-                    'extras' => array(
-                        'translation_domain' => $translationDomain       
-                    ),
                     'children' => array()   
                 );
           

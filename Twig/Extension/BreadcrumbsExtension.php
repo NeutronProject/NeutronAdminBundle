@@ -9,6 +9,8 @@
  */
 namespace Neutron\AdminBundle\Twig\Extension;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use Knp\Menu\Iterator\CurrentItemFilterIterator;
 
 use Knp\Menu\ItemInterface;
@@ -46,8 +48,10 @@ class BreadcrumbsExtension extends \Twig_Extension
      * @param ItemInterface $menu
      * @return string html
      */
-    public function render(ItemInterface $menu)
+    public function render(ItemInterface $menu, array $options = array())
     {   
+        $options = $this->resolveOptions($options);
+        
         $matcher = $this->container->get('knp_menu.matcher');
         $voter = $this->container->get('neutron_component.menu.voter');
         $voter->setUri($this->container->get('request')->getRequestUri());
@@ -71,8 +75,24 @@ class BreadcrumbsExtension extends \Twig_Extension
         }
 
         return $this->container->get('templating')
-        	->render('NeutronAdminBundle:Menu:breadcrumbs.html.twig',
+        	->render($options['template'],
         		array('breadcrumbs' => $breadcrumbs));
+    }
+    
+    /**
+     * Resolves options
+     * 
+     * @param array $options
+     */
+    protected function resolveOptions(array $options)
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setRequired(array('template'));
+        $resolver->setAllowedTypes(array(
+            'template' => array('string')
+        ));
+        
+        return $resolver->resolve($options);
     }
 
     /**
