@@ -33,27 +33,23 @@ class MainTreeSubscriber implements EventSubscriber
         
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
             
-            if (!$entity instanceof MainTree){
-                return;
+            if ($entity instanceof MainTree){
+                $meta = $em->getClassMetadata(get_class($entity));
+                $this->updateSlug($entity, $uow, $meta, self::FIELD);
             }
-            
-            $meta = $em->getClassMetadata(get_class($entity));
-            $this->updateSlug($entity, $uow, $meta, self::FIELD);
         }
         
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             
-            if (!$entity instanceof MainTree){
-                return;
-            }
-            
-            $meta = $em->getClassMetadata(get_class($entity));
-            
-            $changeset = $uow->getEntityChangeSet($entity);
-            
-            if (isset($changeset[self::FIELD])){
-                $this->updateSlug($entity, $uow, $meta, self::FIELD);     
-            }
+            if ($entity instanceof MainTree){
+                $meta = $em->getClassMetadata(get_class($entity));
+                
+                $changeset = $uow->getEntityChangeSet($entity);
+                
+                if (isset($changeset[self::FIELD])){
+                    $this->updateSlug($entity, $uow, $meta, self::FIELD);     
+                }
+            }  
         }
 
     }
