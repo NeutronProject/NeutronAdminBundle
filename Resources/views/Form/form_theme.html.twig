@@ -540,18 +540,18 @@
 
 {% block neutron_layout_widget %}
 {% spaceless %}
-    <div class="widget-container" style="width:590px">
+    <div id="neutron-layout" class="widget-container" data-options="{{ configs|json_encode }}" style="width:590px">
 	<legend>{% trans from "NeutronLayoutBundle" %}form.layout.available_widgets{% endtrans %}</legend>
         <div id="widget-list" >
             {% if (widgets|length) > 0 %}
                 {% for widget in widgets %}
                     <div class="widget-item">
-                        <div data-widget="{{ widget.getName() }}" class="ui-state-default widget">{{ widget.getLabel() }}</div>
+                        <div data-widget="{{ widget.exportOptions()|json_encode }}" class="ui-state-default widget"><span class="widget-label">{{ widget.getLabel() }}</span></div>
                         <p class="desc">{{ widget.getDescription() }}</p>
                     </div>
                 {% endfor %}
             {% else %}
-                {% trans from "NeutronLayoutBundle" %}widgets.empty{% endtrans %}
+                <p class="desc">{% trans from "NeutronLayoutBundle" %}widgets.empty{% endtrans %}</p>
             {% endif %}
         </div>
     </div>
@@ -563,24 +563,24 @@
                 {% for panel in form %}              
                     <h3><a href="#">{{ panel.vars.label }}</a></h3>
                     
-                    <div class="neutron-sortable" data-panel="{{ panel.vars.data.name }}" data-prototype="{{ form_row(panel.widgetInstances.vars.prototype)|e }}">
+                    <div id="{{ panel.vars.data.name }}" class="neutron-sortable" data-panel="{{ panel.vars.data.exportOptions()|json_encode }}" data-prototype="{{ form_row(panel.widgetReferences.vars.prototype)|e }}">
                         {% for widgets in panel %}
                             {% for widget in widgets %}
-                                <div data-widget="{{ widget.widget.vars.value }}" class="ui-state-default widget">
-                                    {{ neutron_layout_widget(widget.widget.vars.value).getLabel() }}
+                                <div data-widget="{{ widget.vars.data.widget.exportOptions|json_encode }}" class="ui-state-default widget">
+                                    <span class="widget-label">{{ widget.vars.data.label|slice(0,35) }}</span>
                                     <a class="delete-btn" href="#" style="float:right"></a>
                                     <a href="#" class="edit-btn" style="float:right"></a>
                                     {{ form_widget(widget.identifier) }}
                                     {{ form_widget(widget.category) }}
-                                    {{ form_widget(widget.widget) }}
-                                    {{ form_widget(widget.plugin) }}
-                                    {{ form_widget(widget.panel) }}
+                                    {{ form_widget(widget.strategyWidgetName) }}
+                                    {{ form_widget(widget.strategyPluginName) }}
+                                    {{ form_widget(widget.strategyPanelName) }}
                                     {{ form_widget(widget.position) }}
                                 </div>
                             {% endfor %}
                         {% endfor %}
                           
-                        <p {% if(panel.vars.data.widgetInstances|length)  > 0 %}style="display:none"{% endif %}
+                        <p {% if(panel.vars.data.widgetReferences|length)  > 0 %}style="display:none"{% endif %}
                             class="desc">{{ panel.vars.data.description }}</p>
                     </div>
 
@@ -591,30 +591,35 @@
         </div>
     </div>
 
-    <div id="neutron-layout-dialog" title="{% trans from 'messages' %}widget_instance.dlg.title{% endtrans %}" style="display:none">
-        <div id="dlg-error-msg" class="ui-state-error ui-corner-all" style="display: none;"> 
+    <div id="neutron-layout-dialog" title="{% trans from 'messages' %}widget_reference.dlg.title{% endtrans %}" style="display:none">
+        <div id="dlg-error-msg-blank" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
             <p>
                 <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-                <strong>{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.error_msg{% endtrans %}</strong>
+                <strong>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.error_msg_blank{% endtrans %}</strong>
+            </p>
+	</div>
+            
+        <div id="dlg-error-msg-exist" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+                <strong>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.error_msg_exist{% endtrans %}</strong>
             </p>
 	</div>
 	
         <div>
-            <label>{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.label{% endtrans %}</label>
+            <label>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.label{% endtrans %}</label>
             <div>
-                <select id="neutron-widget-instance" class="uniform">
-
-                </select>
+                <select id="neutron-widget-reference" class="uniform"></select>
+               
                 <button id="neutron-layout-dialog-save">
-                    {% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.btn{% endtrans %}
+                    {% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.btn{% endtrans %}
                 </button>
             </div>
         </div>  
         
-        <p class="desc">{% trans from 'NeutronLayoutBundle' %}widget_instance.dlg.desc{% endtrans %}</p>
+        <p class="desc">{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.desc{% endtrans %}</p>
     </div>
-    
-    <span id="neutron-layout" style="display: none">{{ configs|json_encode }}</span>
+
 
 {% endspaceless %}
 {% endblock neutron_layout_widget %}
@@ -635,6 +640,34 @@
 </div>
 {% endspaceless %}
 {% endblock neutron_input_limiter_row %}
+
+{% block neutron_multi_select_sortable_collection_row %}
+{% spaceless %}
+<div class="field">
+    {{ block('field_label') }}
+
+    <div data-prototype="{{ form_widget(form.get('prototype')) | e }}" data-options="{{ configs|merge({'id': id})|json_encode|e }}" class="multi-select-sortable-container controls">
+              
+        <div class="neutron-grid">{{ neutron_datagrid(grid) }}</div>     
+        <div id="multi-select-sortable-{{ id }}" class="multi-select-sortable" style="display:none">
+            <p class="desc">{% trans from "NeutronFormBundle" %}muli_select_sortable.description{% endtrans %}</p>
+            <p id="multi-select-sortable-error-{{ id }}" class="multi-select-sortable-error" style="display:none">{% trans from "NeutronFormBundle" %}muli_select_sortable.error{% endtrans %}</p>
+            {% for child in form %}
+                <div id="multi-select-element-{{ child.reference.vars.value }}" class="ui-state-default multi-select-element">
+                    {{ child.vars.data.name }}
+                    <a class="delete-btn" href="#" style="float:right"></a>
+                    <a data-icon="{% if child.isActive.vars.value == 1 %}ui-icon-bullet{% else %}ui-icon-radio-on{% endif %}" class="active-btn" href="#" style="float:right"></a>
+                    {{ form_widget(child.position) }}
+                    {{ form_widget(child.isActive) }}
+                    {{ form_widget(child.reference) }}                 
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+        
+</div>
+{% endspaceless %}
+{% endblock neutron_multi_select_sortable_collection_row %}
 
 
 

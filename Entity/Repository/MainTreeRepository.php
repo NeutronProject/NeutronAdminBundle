@@ -36,7 +36,7 @@ class MainTreeRepository extends NestedTreeRepository
     
     public function findBySlug($slug, $useCache, $locale)
     {
-        return $this->findBySlugQuery($slug, $useCache, $locale)->getSingleResult();
+        return $this->findBySlugQuery($slug, $useCache, $locale)->getOneOrNullResult();
     }
     
     public function generateCacheId($slug, $locale)
