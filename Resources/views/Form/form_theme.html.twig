@@ -48,7 +48,9 @@
 {% block textarea_widget %}
 {% spaceless %}
     {% set attr = attr|merge({'class': (attr.class|default('') ~ ' textarea')|trim}) %}
-    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    <div class="controls">
+        <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    </div>
 {% endspaceless %}
 {% endblock textarea_widget %}
 

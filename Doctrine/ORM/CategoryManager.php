@@ -80,7 +80,7 @@ class CategoryManager implements CategoryManagerInterface
                 $item = array(
                     'name' => $child['name'],
                     'label' => $child['title'],
-                    'route' => 'neutron_page.distributor',
+                    'route' => 'neutron_layout.distributor',
                     'routeParameters' => array('slug' => $child['slug']),
                     'display' => $child['displayed'],                    
                     'lvl' => $child['lvl'],
