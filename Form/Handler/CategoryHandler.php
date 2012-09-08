@@ -60,7 +60,9 @@ class CategoryHandler implements FormHandlerInterface
             if ($this->form->isValid()) {
                 $node = $this->form->getData();
                 $this->treeManager->persistAsLastChildOf($node, $node->getParent());
-
+                $plugin = $this->pluginProvider->get($this->form->getData()->getType());
+                $pluginInstanceManager = $plugin->getManager();
+                $pluginInstanceManager->create($node, true);
                 $route = $this->pluginProvider
                     ->get($this->form->getData()->getType())->getUpdateRoute();
                 

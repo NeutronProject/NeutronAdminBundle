@@ -129,13 +129,16 @@ class CategoryManager implements CategoryManagerInterface
             \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,
             'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
         );
+        $query->setHint(
+            \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE,
+            'en'
+        );
     
         if (false === $administrativeMode){
             $query->setHint(
                 \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,
                 'Neutron\\ComponentBundle\\Doctrine\\ORM\\Query\\TreeWalker\\AclWalker'
             );
-    
             $query->setHint(
                 AclWalker::HINT_ACL_OPTIONS,
                 array('roles' => $roles, 'mask' => MaskBuilder::MASK_VIEW)

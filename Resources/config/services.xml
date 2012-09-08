@@ -12,6 +12,7 @@
         <parameter key="neutron_admin.event_subscriber.locale.class">Neutron\AdminBundle\EventSubscriber\LocaleSubscriber</parameter>
         <parameter key="neutron_admin.twig.extension.application_language.class">Neutron\AdminBundle\Twig\Extension\ApplicationLanguageExtension</parameter>
         <parameter key="neutron_admin.twig.form.class">Neutron\AdminBundle\Twig\Extension\FormExtension</parameter>
+        <parameter key="neutron_admin.helper.application.class">Neutron\AdminBundle\Helper\ApplicationHelper</parameter>
     </parameters>
     
     <services>
@@ -67,6 +68,11 @@
             <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
             <argument>%stof_doctrine_extensions.default_locale%</argument>
             <argument>%neutron_admin.languages.backend%</argument>
+        </service>
+        
+        <service id="neutron_admin.helper.application"  class="%neutron_admin.helper.application.class%">
+        	<argument type="service" id="session" />
+        	<argument>%locale%</argument>
         </service>
 		
 

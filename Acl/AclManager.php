@@ -1,6 +1,10 @@
 <?php
 namespace Neutron\AdminBundle\Acl;
 
+use Neutron\UserBundle\Model\BackendRoles;
+
+use Symfony\Component\Security\Core\SecurityContextInterface;
+
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -13,9 +17,13 @@ class AclManager implements AclManagerInterface
 {
     protected $aclProvider;
     
-    public function __construct(MutableAclProviderInterface $aclProvider)
+    protected $securityContext;
+    
+    public function __construct(MutableAclProviderInterface $aclProvider, 
+            SecurityContextInterface $securityContext)
     {
         $this->aclProvider = $aclProvider;
+        $this->securityContext = $securityContext;
     }
     
     public function setObjectPermissions(ObjectIdentityInterface $objectIdentity, array $roles)
@@ -58,6 +66,20 @@ class AclManager implements AclManagerInterface
         }
     
         return $permissions;
+    }
+    
+    public function isGranted($object, $administrativeMode = false)
+    {      
+        if ($administrativeMode){
+            return true;
+        }
+        
+        $user = $this->securityContext->getToken()->getUser();
+        if ($user != 'anon.' && count(array_intersect($user->getRoles(), BackendRoles::getAdministrativeRoles())) > 0) {
+            return true;
+        }
+        
+        return $this->securityContext->isGranted('VIEW', $object);
     }
    
     

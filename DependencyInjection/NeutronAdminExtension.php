@@ -26,10 +26,9 @@ class NeutronAdminExtension extends Extension
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         
-        foreach (array('services', 'acl', 'settings') as $basename) {
+        foreach (array('services', 'acl', 'settings', 'orm') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
         }
-        
 
         $container->setParameter('neutron_admin.languages.backend', $config['languages']['backend']);
         $container->setParameter('neutron_admin.languages.frontend', $config['languages']['frontend']);
