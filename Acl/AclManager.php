@@ -68,18 +68,34 @@ class AclManager implements AclManagerInterface
         return $permissions;
     }
     
-    public function isGranted($object, $administrativeMode = false)
-    {      
-        if ($administrativeMode){
-            return true;
+    public function getUserRoles()
+    {
+        $user = $this->securityContext->getToken()->getUser();
+    
+        if ($user != 'anon.') {
+            return $user->getRoles();
         }
-        
+    
+        return array('IS_AUTHENTICATED_ANONYMOUSLY');
+    }
+    
+    public function isAdministrativeMode()
+    {
         $user = $this->securityContext->getToken()->getUser();
         if ($user != 'anon.' && count(array_intersect($user->getRoles(), BackendRoles::getAdministrativeRoles())) > 0) {
             return true;
         }
         
-        return $this->securityContext->isGranted('VIEW', $object);
+        return false;
+    }
+    
+    public function isGranted($object, $mask)
+    {      
+        if ($this->isAdministrativeMode()){
+            return true;
+        }
+        
+        return $this->securityContext->isGranted($mask, $object);
     }
    
     

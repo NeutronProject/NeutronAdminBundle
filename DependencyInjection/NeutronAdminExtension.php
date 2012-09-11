@@ -40,28 +40,13 @@ class NeutronAdminExtension extends Extension
         
         
         
-        $this->loadCategory($config['category'], $container, $loader);
+       
 
         $this->loadSettings($config['settings'], $container, $loader);
         
     }
     
-    private function loadCategory(array $config, ContainerBuilder $container, XmlFileLoader $loader)
-    {
-        $loader->load('category.xml');
-    
-        $container->setAlias('neutron_admin.category.manager', $config['manager']);
-        $container->setAlias('neutron_admin.form.handler.category', $config['form']['handler']);
-        
-        
-        $this->remapParametersNamespaces($config, $container, array(
-            'form' => 'neutron_admin.category.form.%s',
-            '' => array(
-                'tree_data_class' => 'neutron_admin.category.tree_data_class',
-                'tree_name' => 'neutron_admin.category.tree_name'       
-            )
-        )); 
-    }
+
     
     private function loadSettings(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {

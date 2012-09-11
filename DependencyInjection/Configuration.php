@@ -26,9 +26,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('neutron_admin');
 
         $this->addLanguageSection($rootNode);
-        
-        $this->addCategorySection($rootNode);
-        
+ 
         $this->addSettingsSection($rootNode);
 
         return $treeBuilder;
@@ -65,31 +63,7 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
     }
-    
-    private function addCategorySection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('category')
-                    ->addDefaultsIfNotSet()
-                    ->canBeUnset()
-                    ->children()
-                        ->scalarNode('manager')->defaultValue('neutron_admin.category.manager.default')->end()
-                        ->scalarNode('tree_data_class')->defaultValue('Neutron\AdminBundle\Entity\MainTree')->end()
-                        ->scalarNode('tree_name')->defaultValue('main')->end()
-                        ->arrayNode('form')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('type')->defaultValue('neutron_admin_form_category')->end()
-                                ->scalarNode('handler')->defaultValue('neutron_admin.form.handler.category.default')->end()
-                                ->scalarNode('name')->defaultValue('neutron_admin_form_category')->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
+
     
     private function addSettingsSection(ArrayNodeDefinition $node)
     {

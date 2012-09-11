@@ -12,5 +12,10 @@ interface AclManagerInterface
     public function deleteObjectPermissions(ObjectIdentityInterface $objectIndentity);
     
     public function getPermissions(ObjectIdentityInterface $objectIndentity);
-   
+    
+    public function getUserRoles();
+    
+    public function isAdministrativeMode();
+    
+    public function isGranted($object, $mask); 
 }

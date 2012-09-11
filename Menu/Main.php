@@ -32,7 +32,7 @@ class Main extends ContainerAware
         
         $category = $menu->addChild('category', array(
             'label' => 'menu.category',
-            'route' => 'neutron_admin.category.management',
+            'route' => 'neutron_layout.category.management',
             'extras' => array(
                 'safe_label' => true,
                 'breadcrumbs' => true,
@@ -43,7 +43,7 @@ class Main extends ContainerAware
         
         $category->addChild('category_create', array(
             'label' => 'menu.category_create',
-            'route' => 'neutron_admin.category.create',
+            'route' => 'neutron_layout.category.create',
             'routeParameters' => array('parentId' => $this->container->get('request')->get('parentId', 0)),
             'display' => false,
             'extras' => array(
@@ -55,7 +55,7 @@ class Main extends ContainerAware
         
         $category->addChild('category_delete', array(
             'label' => 'menu.category_delete',
-            'route' => 'neutron_admin.category.delete',
+            'route' => 'neutron_layout.category.delete',
             'routeParameters' => array('nodeId' => $this->container->get('request')->get('nodeId', 0)),
             'display' => false,
             'extras' => array(

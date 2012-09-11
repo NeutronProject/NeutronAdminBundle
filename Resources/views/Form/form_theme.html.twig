@@ -379,13 +379,14 @@
 {% block neutron_tinymce_row %}
 {% spaceless %}
 <div class="field">
-   {{ block('form_label') }}
-   <div class="controls">
-       {{ form_widget(form) }} 
-       <span class="neutron_tinymce" style="display:none">
-           {{ configs|merge({'id': id, 'base_url': site_url})|json_encode|raw }}
-       </span>
-   </div>
+    {{ block('form_label') }}
+
+    {{ form_widget(form) }} 
+        
+    <span class="neutron_tinymce" style="display:none">
+        {{ configs|merge({'id': id, 'base_url': site_url})|json_encode|raw }}
+    </span>
+  
 </div>
 {% endspaceless %}
 {% endblock neutron_tinymce_row %}
