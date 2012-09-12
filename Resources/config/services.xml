@@ -7,7 +7,6 @@
     <parameters>
         <parameter key="neutron_admin.twig.acl.class">Neutron\AdminBundle\Twig\Extension\AclExtension</parameter>
         <parameter key="neutron_admin.twig.breadcrumbs.class">Neutron\AdminBundle\Twig\Extension\BreadcrumbsExtension</parameter>
-        <parameter key="neutron_admin.tree.main.class">Neutron\AdminBundle\Tree\Main</parameter>
         <parameter key="neutron_admin.event_subscriber.locale.class">Neutron\AdminBundle\EventSubscriber\LocaleSubscriber</parameter>
         <parameter key="neutron_admin.twig.extension.application_language.class">Neutron\AdminBundle\Twig\Extension\ApplicationLanguageExtension</parameter>
         <parameter key="neutron_admin.twig.form.class">Neutron\AdminBundle\Twig\Extension\FormExtension</parameter>
