@@ -25,11 +25,27 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neutron_admin');
 
+        $this->addAclConfigurations($rootNode);
+        
         $this->addLanguageSection($rootNode);
  
         $this->addSettingsSection($rootNode);
 
         return $treeBuilder;
+    }
+    
+    private function addAclConfigurations(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('acl')
+                ->addDefaultsIfNotSet()
+                ->canBeUnset()
+                ->children()
+                    ->scalarNode('use_acl')->defaultValue(false)->end()
+                ->end()
+            ->end()
+        ;
     }
     
     private function addLanguageSection(ArrayNodeDefinition $node)

@@ -24,6 +24,7 @@
         <service id="neutron_admin.acl.manager" class="%neutron_admin.acl.manager.class%">
         	<argument type="service" id="security.acl.provider" />
         	<argument type="service" id="security.context" />
+        	<argument>%neutron_admin.acl_options%</argument>
         </service>
 
 

@@ -19,15 +19,22 @@ class AclManager implements AclManagerInterface
     
     protected $securityContext;
     
+    protected $options;
+    
     public function __construct(MutableAclProviderInterface $aclProvider, 
-            SecurityContextInterface $securityContext)
+            SecurityContextInterface $securityContext, array $options)
     {
         $this->aclProvider = $aclProvider;
         $this->securityContext = $securityContext;
+        $this->options = $options;
     }
     
     public function setObjectPermissions(ObjectIdentityInterface $objectIdentity, array $roles)
     {
+        if (!$this->isAclEnabled()){
+            return false;
+        }
+        
         $acl = $this->createAcl($objectIdentity);
         
         foreach ($roles as $role => $permissions){
@@ -79,8 +86,17 @@ class AclManager implements AclManagerInterface
         return array('IS_AUTHENTICATED_ANONYMOUSLY');
     }
     
+    public function isAclEnabled()
+    {
+        return $this->options['use_acl'];
+    }
+    
     public function isAdministrativeMode()
     {
+        if (!$this->isAclEnabled()){
+            return true;
+        }
+        
         $user = $this->securityContext->getToken()->getUser();
         if ($user != 'anon.' && count(array_intersect($user->getRoles(), BackendRoles::getAdministrativeRoles())) > 0) {
             return true;

@@ -32,6 +32,7 @@ class NeutronAdminExtension extends Extension
 
         $container->setParameter('neutron_admin.languages.backend', $config['languages']['backend']);
         $container->setParameter('neutron_admin.languages.frontend', $config['languages']['frontend']);
+        $container->setParameter('neutron_admin.acl_options', $config['acl']);
 
             
         $container->getDefinition('neutron_admin.event_subscriber.locale_subscriber')
