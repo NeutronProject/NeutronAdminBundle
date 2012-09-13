@@ -32,7 +32,7 @@ class AclManager implements AclManagerInterface
     public function setObjectPermissions(ObjectIdentityInterface $objectIdentity, array $roles)
     {
         if (!$this->isAclEnabled()){
-            return false;
+            return;
         }
         
         $acl = $this->createAcl($objectIdentity);
