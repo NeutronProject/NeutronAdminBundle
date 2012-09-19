@@ -541,10 +541,10 @@
 {% endspaceless %}
 {% endblock neutron_image_upload_edit %}
 
-{% block neutron_layout_widget %}
+{% block neutron_panels_widget %}
 {% spaceless %}
-    <div id="neutron-layout" class="widget-container" data-options="{{ configs|json_encode }}" style="width:590px">
-	<legend>{% trans from "NeutronLayoutBundle" %}form.layout.available_widgets{% endtrans %}</legend>
+    <div id="neutron-panels" class="widget-container" data-options="{{ configs|json_encode }}" style="width:590px">
+	<legend>{% trans from "NeutronMvcBundle" %}form.panels.available_widgets{% endtrans %}</legend>
         <div id="widget-list" >
             {% if (widgets|length) > 0 %}
                 {% for widget in widgets %}
@@ -554,12 +554,12 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p class="desc">{% trans from "NeutronLayoutBundle" %}widgets.empty{% endtrans %}</p>
+                <p class="desc">{% trans from "NeutronMvcBundle" %}widgets.empty{% endtrans %}</p>
             {% endif %}
         </div>
     </div>
     <div class="widget-container" style="width:310px">
-        <legend>{% trans from "NeutronLayoutBundle" %}layout.panels{% endtrans %}</legend>
+        <legend>{% trans from "NeutronMvcBundle" %}panels.panels{% endtrans %}</legend>
         <div id="neutron-plugin-containers">
            
             {% if (form|length) > 0 %} 
@@ -589,43 +589,43 @@
 
                 {% endfor %}
             {% else %}
-                {% trans from "NeutronLayoutBundle" %}panels.empty{% endtrans %}
+                {% trans from "NeutronMvcBundle" %}panels.empty{% endtrans %}
             {% endif %}
         </div>
     </div>
 
-    <div id="neutron-layout-dialog" title="{% trans from 'messages' %}widget_reference.dlg.title{% endtrans %}" style="display:none">
+    <div id="neutron-panels-dialog" title="{% trans from 'messages' %}widget_reference.dlg.title{% endtrans %}" style="display:none">
         <div id="dlg-error-msg-blank" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
             <p>
                 <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-                <strong>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.error_msg_blank{% endtrans %}</strong>
+                <strong>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.error_msg_blank{% endtrans %}</strong>
             </p>
 	</div>
             
         <div id="dlg-error-msg-exist" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
             <p>
                 <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-                <strong>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.error_msg_exist{% endtrans %}</strong>
+                <strong>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.error_msg_exist{% endtrans %}</strong>
             </p>
 	</div>
 	
         <div>
-            <label>{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.label{% endtrans %}</label>
+            <label>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.label{% endtrans %}</label>
             <div>
                 <select id="neutron-widget-reference" class="uniform"></select>
                
-                <button id="neutron-layout-dialog-save">
-                    {% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.btn{% endtrans %}
+                <button id="neutron-panels-dialog-save">
+                    {% trans from 'NeutronMvcBundle' %}widget_reference.dlg.btn{% endtrans %}
                 </button>
             </div>
         </div>  
         
-        <p class="desc">{% trans from 'NeutronLayoutBundle' %}widget_reference.dlg.desc{% endtrans %}</p>
+        <p class="desc">{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.desc{% endtrans %}</p>
     </div>
 
 
 {% endspaceless %}
-{% endblock neutron_layout_widget %}
+{% endblock neutron_panels_widget %}
 
 
 {% block neutron_input_limiter_row %}
