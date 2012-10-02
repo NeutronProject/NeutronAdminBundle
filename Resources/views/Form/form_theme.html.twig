@@ -573,10 +573,10 @@
                                     <span class="widget-label">{{ widget.vars.data.label|slice(0,35) }}</span>
                                     <a class="delete-btn" href="#" style="float:right"></a>
                                     <a href="#" class="edit-btn" style="float:right"></a>
-                                    {{ form_widget(widget.identifier) }}
-                                    {{ form_widget(widget.category) }}
-                                    {{ form_widget(widget.strategyWidgetName) }}
-                                    {{ form_widget(widget.strategyPluginName) }}
+                                    {{ form_widget(widget.pluginInstanceId) }}
+                                    {{ form_widget(widget.pluginIdentifier) }}
+                                    {{ form_widget(widget.widgetInstanceId) }}
+                                    {{ form_widget(widget.widgetIdentifier) }}
                                     {{ form_widget(widget.strategyPanelName) }}
                                     {{ form_widget(widget.position) }}
                                 </div>
@@ -632,10 +632,7 @@
 {% spaceless %}
 <div class="field">
     {{ block('field_label') }}
-        <div class="controls">
-            {{ form_widget(form) }}
-        </div>
-     
+       {{ form_widget(form) }}
     <span class="neutron-input-limiter" style="display:none">
         {{ configs|merge({'id': id})|json_encode|raw }}
     </span>
