@@ -644,22 +644,19 @@
 {% block neutron_multi_select_sortable_collection_row %}
 {% spaceless %}
 <div class="field">
-    {{ block('field_label') }}
-
+   
     <div data-prototype="{{ form_widget(form.get('prototype')) | e }}" data-options="{{ configs|merge({'id': id})|json_encode|e }}" class="multi-select-sortable-container controls">
-              
+             
         <div class="neutron-grid">{{ neutron_datagrid(grid) }}</div>     
         <div id="multi-select-sortable-{{ id }}" class="multi-select-sortable" style="display:none">
             <p class="desc">{% trans from "NeutronFormBundle" %}muli_select_sortable.description{% endtrans %}</p>
             <p id="multi-select-sortable-error-{{ id }}" class="multi-select-sortable-error" style="display:none">{% trans from "NeutronFormBundle" %}muli_select_sortable.error{% endtrans %}</p>
             {% for child in form %}
-                <div id="multi-select-element-{{ child.reference.vars.value }}" class="ui-state-default multi-select-element">
-                    {{ child.vars.data.name }}
+                <div id="multi-select-element-{{ child.inversed.vars.value }}" data-index="{{ loop.index0 }}" class="ui-state-default multi-select-element">
+                    {{ child.vars.data.label }}
                     <a class="delete-btn" href="#" style="float:right"></a>
-                    <a data-icon="{% if child.isActive.vars.value == 1 %}ui-icon-bullet{% else %}ui-icon-radio-on{% endif %}" class="active-btn" href="#" style="float:right"></a>
                     {{ form_widget(child.position) }}
-                    {{ form_widget(child.isActive) }}
-                    {{ form_widget(child.reference) }}                 
+                    {{ form_widget(child.inversed) }}                 
                 </div>
             {% endfor %}
         </div>
