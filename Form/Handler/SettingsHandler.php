@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 use Doctrine\ORM\EntityManager;
 
-use Neutron\ComponentBundle\Form\Handler\FormHandlerInterface;
-
 use Neutron\ComponentBundle\Form\Helper\FormHelper;
 
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -19,7 +17,7 @@ use Symfony\Component\Form\Form;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class SettingsHandler implements FormHandlerInterface
+class SettingsHandler 
 {
     protected $em;
     protected $request;
