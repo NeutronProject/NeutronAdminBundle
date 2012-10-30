@@ -2,6 +2,8 @@
 
 namespace Neutron\AdminBundle;
 
+use Neutron\AdminBundle\DependencyInjection\Compiler\MenuPass;
+
 use Neutron\AdminBundle\DependencyInjection\Compiler\LocaleConfigurationPass;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,5 +19,6 @@ class NeutronAdminBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new LocaleConfigurationPass());
+        $container->addCompilerPass(new MenuPass());
     }
 }

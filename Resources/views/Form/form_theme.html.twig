@@ -430,10 +430,10 @@
                 <img src="{{ site_url }}bundles/neutronform/images/cancel.png" />
             </a>
         </span>
-        <p>
-            <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-            <span class="neutron-imageupload-error">&nbsp</span>
-        </p>
+       
+        <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+        <span class="neutron-imageupload-error">&nbsp</span>
+
     </div>
         
         
@@ -640,6 +640,27 @@
 </div>
 {% endspaceless %}
 {% endblock neutron_input_limiter_row %}
+    
+{% block neutron_recaptcha_row %}
+{% spaceless %}
+<div class="field">
+    {{ block('field_label') }}
+
+    <div class="controls">
+        <div id="{{ id }}" style="display: none;"></div>
+    </div>
+    <noscript>
+        <iframe src="{{ configs.server_url }}/noscript?k={{ configs.public_key }}" width="500" height="300" frameborder="0"></iframe>
+        <br />
+        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+        <input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
+    </noscript>
+    <span class="neutron-recaptcha" style="display:none">
+        {{ configs|merge({'id': id, 'lang': app.request.locale})|json_encode|raw }}
+    </span>
+</div>
+{% endspaceless %}
+{% endblock neutron_recaptcha_row %}
 
 {% block neutron_multi_select_sortable_collection_row %}
 {% spaceless %}
@@ -665,6 +686,156 @@
 </div>
 {% endspaceless %}
 {% endblock neutron_multi_select_sortable_collection_row %}
+    
+    
+{% block neutron_multi_image_upload_collection_row %}
+{% spaceless %}
+<div class="field">
+    <span style="font-weight:bold;font-size:11px;">{{ form.vars.label }}</span>
+    <br/><br/>
+    <div id="neutron-multi-image-upload-error-{{ id }}" 
+        class="neutron-multi-image-upload-error" style="display:none">
+
+        <div class="ui-state-error" style="width:340px; padding:5px;">         
+                <span style="float:right">
+                    <a href="#close" id="neutron-multi-upload-error-cancel-{{ id }}">
+                        <img src="{{ site_url }}bundles/neutronform/images/cancel.png" />
+                    </a>
+                </span>
+
+                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+                <span class="neutron-imageupload-error">&nbsp;</span>       
+        </div>
+    </div>
+	
+    <div id="multi-image-progress-{{ id }}"></div>
+
+    <div id="drag-drop-area-{{ id }}" class="neutron-drag-drop" {% if form|length > 0 %}style="display:none;"{% endif %}>
+        <div class="neutron-drag-drop-inside">
+            <p class="neutron-drag-drop-info" id="neutron-drag-drop-info-{{ id }}" 
+                trans-drag="{% trans from 'NeutronFormBundle' %}neutron_upload.drag_drop_text{% endtrans %}"
+                trans-no-images="{% trans from 'NeutronFormBundle' %}neutron_upload.no_files_text{% endtrans %}"
+            ></p>
+        </div>
+    </div>
+        
+    
+    <ul id="neutron-multi-image-upload-container-{{ id }}" class="neutron-sortable">
+        {% for child in form %}
+            <li data-index="{{ loop.index0 }}">
+                {{ form_widget(child) }}
+                <img src="{{ site_url~configs.dir~form[loop.index0].name.get('value') }}" 
+                    width="{{ configs.minWidth }}" height="{{ configs.minHeight }}" />
+            </li>
+        {% endfor %}
+    </ul>
+        
+
+	
+    <div id="neutron-progressbar-prototype-{{ id }}" style="display:none">
+        <div id="__id__"  class="neutron-progressbar-multi-image" style="width:350px; height:10px;" ></div>
+        <div class="neutron-progress-info">
+            <div class="ui-widget">
+                <div class="ui-state-highlight ui-corner-all" style="width:340px;padding:5px;"> 
+                    <span style="float:right">
+                        <a href="#remove" id="neutron-multi-upload-remove-image-__id__">
+                            <img src="{{ site_url }}bundles/neutronform/images/cancel.png" />
+                        </a>
+                    </span>
+                    <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+                    <span>{% trans from 'NeutronFormBundle' %}neutron_upload.upload_progress{% endtrans %}: <strong>0%</strong></span>
+                    <br/>
+                    <span>__image_name__ (__image_size__)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+   {% set configs = {
+            id: id,
+            base_url: site_url
+        }|merge(configs) 
+    %}
+    
+    <span data-prototype="{{ form_widget(form.get('prototype')) | e }}" 
+        class="neutron_multi_image_upload" style="display:none">{{ configs|json_encode|raw }}
+    </span>
+    <div style="clear:both;"></div> 
+    {{ block('neutron_multi_image_controls') }}
+    <div style="clear:both;"></div> 
+    <div><div class="controls"></div></div>
+    <span id="{{ id }}"></span>  
+ 
+</div>
+
+{{ block('neutron_image_upload_crop') }}
+{{ block('neutron_multi_image_upload_edit') }}
+  
+{% endspaceless %}
+{% endblock neutron_multi_image_upload_collection_row %}
+
+
+{% block neutron_multi_image_controls %}
+{% spaceless %}
+<div id="neutron_multi_image_controls-{{ id }}" class="neutron-controls">
+    <button id="neutron-multi-image-btn-upload-{{ id }}" class="ui-icon ui-icon-newwin neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_upload_title{% endtrans %}"></button> &nbsp;
+
+    <a id="neutron-multi-image-btn-active-{{ id }}" title="{{ configs.button_inactive_title }}"
+           class="ui-icon ui-icon-radio-on neutron-multi-image-upload-button" ></a>  &nbsp;
+           
+    <a id="neutron-multi-image-btn-view-{{ id }}" class="ui-icon ui-icon-zoomin neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_view_title{% endtrans %}"></a>  &nbsp;
+        
+    <a id="neutron-multi-image-btn-crop-{{ id }}" class="ui-icon ui-icon-scissors neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_crop_title{% endtrans %}"></a>  &nbsp;
+    <a id="neutron-multi-image-btn-edit-{{ id }}" class="ui-icon ui-icon-pencil neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_edit_meta_title{% endtrans %}"></a>  &nbsp;
+    <a id="neutron-multi-image-btn-rotate-{{ id }}" class="ui-icon ui-icon-arrowrefresh-1-s neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_rotate_title{% endtrans %}"></a> &nbsp;
+    <a id="neutron-multi-image-btn-reset-{{ id }}" class="ui-icon ui-icon-cancel neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_reset_title{% endtrans %}"></a>  &nbsp;
+    <a id="neutron-multi-image-btn-remove-{{ id }}" class="ui-icon ui-icon-trash neutron-multi-image-upload-button" 
+        title="{% trans from 'NeutronFormBundle' %}neutron_upload.button_remove_title{% endtrans %}"></a>  &nbsp;
+</div>
+
+{% endspaceless %}
+{% endblock neutron_multi_image_controls %}
+
+{% block neutron_multi_image_upload_edit %}
+{% spaceless %}
+<div id="neutron-dlg-multi-image-edit-{{ id }}" class="neutron-form" 
+    title="{% trans from 'NeutronFormBundle' %}neutron_upload.dialog_edit_meta_title{% endtrans %}">
+   <div>
+       <label for="neutron-multi-image_title-{{ id }}" class="neutron-form-label">
+           {% trans from 'NeutronFormBundle' %}neutron_upload.dialog_edit_meta_label_title{% endtrans %}
+       </label>
+       <input type="text" id="neutron-multi-image-title-{{ id }}" class="neutron-form-text" />
+   </div>
+   
+   <div>
+       <label for="neutron-multi-image-caption-{{ id }}" class="neutron-form-label">
+           {% trans from 'NeutronFormBundle' %}neutron_upload.dialog_edit_meta_label_caption{% endtrans %}
+       </label>
+       <input type="text" id="neutron-multi-image-caption-{{ id }}" class="neutron-form-text" />
+   </div>
+   
+   <div>
+       <label for="neutron-multi-image-description-{{ id }}" class="neutron-form-label">
+           {% trans from 'NeutronFormBundle' %}neutron_upload.dialog_edit_meta_label_description{% endtrans %}
+       </label>
+       <textarea id="neutron-multi-image-description-{{ id }}" class="neutron-form-text" rows="5" ></textarea>
+   </div>
+   
+   <div style="float:right">
+       <a id="neutron-edit-dlg-done-btn-{{ id }}" class="neutron-image-upload-button">
+           {% trans from 'NeutronFormBundle' %}neutron_upload.dialog_edit_meta_button_done{% endtrans %}
+       </a>
+   </div>
+   
+</div>
+{% endspaceless %}
+{% endblock neutron_multi_image_upload_edit %}
 
 
 
